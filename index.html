@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap">
 <style>
 :root{
-  /* Layout: one column laid on squared exercise-book paper; chunky cards and big touch targets for a young reader. Each fraction keeps its own colour everywhere in the lessons. */
+  /* Layout: one column laid on squared exercise-book paper; chunky cards and big touch targets for a young reader. Fél, harmad and negyed each keep their own colour everywhere in the lessons. No fraction notation anywhere: only the words. */
   --paper:#FAFBF6;
   --grid:#E2E9F2;
   --card:#FFFFFF;
@@ -132,9 +132,6 @@ body:not(.can-speak) .speak-btn{display:none}
 .shape .piece:focus,.wall-piece:focus{outline:none}
 .shape .piece:focus-visible{stroke:var(--focus);stroke-width:6}
 .shape.locked{pointer-events:none}
-.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1;font-family:var(--font-display);font-weight:600;font-size:.82em;margin:0 .12em}
-.frac>span:first-child{border-bottom:2.5px solid currentColor;padding:0 .2em .1em}
-.frac>span:last-child{padding-top:.1em}
 
 /* ---------- home ---------- */
 .hero{display:grid;gap:22px;padding-block:6px 30px;align-items:center}
@@ -192,8 +189,6 @@ body:not(.can-speak) .speak-btn{display:none}
 .count-label{font-family:var(--font-display);font-size:1.5rem;font-weight:600;min-height:1.3em}
 .stage-hint{color:var(--ink-soft);font-size:1rem}
 .reveal{display:grid;gap:16px}
-.note{display:flex;gap:18px;align-items:center;padding:14px 18px;background:var(--plate);border-radius:18px}
-.note .frac{font-size:2.3rem;flex:none}
 .tip{padding:14px 18px;border:2px dashed var(--border-soft);border-radius:18px;display:grid;gap:4px}
 .tip .hand{font-family:var(--font-hand);font-size:1.4rem;color:var(--teacher);line-height:1.1}
 .figure{display:grid;justify-items:center;gap:6px;margin:0}
@@ -216,7 +211,8 @@ body:not(.can-speak) .speak-btn{display:none}
 .compare-row .gt{font-family:var(--font-display);font-size:2.2rem;font-weight:700;color:var(--ink-soft)}
 .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .result-line{font-size:1.2rem;text-align:center;min-height:1.6em}
-.facts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.facts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:480px){.facts{grid-template-columns:1fr}}
 .facts li{font-family:var(--font-display);font-weight:600;font-size:1.2rem;padding:10px 14px;background:var(--plate);border-radius:14px}
 .facts li small{display:block;font-family:var(--font-body);font-weight:600;font-size:.85rem;color:var(--ink-soft)}
 .pager{display:flex;justify-content:space-between;gap:12px;margin-top:20px;flex-wrap:wrap}
@@ -250,7 +246,7 @@ body:not(.can-speak) .speak-btn{display:none}
 .i-star{fill:var(--star);stroke:var(--item-line);stroke-width:1.3;stroke-linejoin:round}
 .i-kid{fill:var(--kid);stroke:var(--item-line);stroke-width:1.3}
 
-/* ---------- fraction wall ---------- */
+/* ---------- chocolate wall (lesson 8) ---------- */
 .wall{display:block;width:100%;height:auto}
 .wall-piece rect{fill:var(--c);fill-opacity:.24;stroke:var(--line);stroke-width:2;transition:fill-opacity .2s}
 .wall-piece.on rect{fill-opacity:1}
@@ -380,9 +376,9 @@ function az(n){ return (n===1 || n===5 || (n>=50 && n<60)) ? 'az' : 'a'; }
 function gcd(a,b){ return b ? gcd(b, a%b) : a; }
 var NUM = {1:'egy', 2:'két', 3:'három', 4:'négy'};
 var FR = {
-  2:{name:'fél',    poss:'fele',    acc:'felét',    read:'egy ketted, vagy egyszerűen fél', cut:'ketté'},
-  3:{name:'harmad', poss:'harmada', acc:'harmadát', read:'egy harmad', cut:'háromfelé'},
-  4:{name:'negyed', poss:'negyede', acc:'negyedét', read:'egy negyed', cut:'négyfelé'}
+  2:{name:'fél',    poss:'fele',    acc:'felét'},
+  3:{name:'harmad', poss:'harmada', acc:'harmadát'},
+  4:{name:'negyed', poss:'negyede', acc:'negyedét'}
 };
 var COLOR = {1:'var(--whole)', 2:'var(--half)', 3:'var(--third)', 4:'var(--quarter)'};
 var PENCIL = 'var(--pencil)';
@@ -393,7 +389,7 @@ var UNEQ = {
   3:[[.2,.25,.55],[.5,.24,.26],[.16,.6,.24]],
   4:[[.12,.16,.36,.36],[.4,.12,.32,.16],[.18,.38,.12,.32]]
 };
-function frac(d){ return '<span class="frac" aria-label="'+FR[d].read.split(',')[0]+'"><span>1</span><span>'+d+'</span></span>'; }
+var ACC = {torta:'tortát', pizza:'pizzát', csoki:'csokit'};
 function esc(s){ return String(s).replace(/<[^>]*>/g,''); }
 
 /* ================= SVG builders ================= */
@@ -602,10 +598,10 @@ function dist(total, k, kind){
   };
 }
 
-/* fraction wall */
+/* four equal chocolate bars: whole, broken into 2, 3 and 4 equal pieces */
 function wall(rows, interactive){
   var W=600, h=56, g=10, out='';
-  var LABEL = {1:'1 egész', 2:'fél', 3:'harmad', 4:'negyed'};
+  var LABEL = {1:'egész csoki', 2:'fele', 3:'harmada', 4:'negyede'};
   rows.forEach(function(d,r){
     var y=r*(h+g);
     for (var i=0;i<d;i++){
@@ -614,7 +610,7 @@ function wall(rows, interactive){
     }
   });
   var H = rows.length*(h+g)-g;
-  return '<svg class="wall'+(interactive?' interactive':'')+'" viewBox="-2 -2 604 '+(H+4)+'" role="'+(interactive?'group':'img')+'" aria-label="Törtfal">'+out+'</svg>';
+  return '<svg class="wall'+(interactive?' interactive':'')+'" viewBox="-2 -2 604 '+(H+4)+'" role="'+(interactive?'group':'img')+'" aria-label="Négy egyforma csoki">'+out+'</svg>';
 }
 
 /* ================= icons, sound, speech ================= */
@@ -707,11 +703,11 @@ function renderHome(){
     '<div><h1><span class="mk mk-half">Fél</span>, <span class="mk mk-third">harmad</span>, <span class="mk mk-quarter">negyed</span></h1>'+
     '<p class="lead">Hogyan osztozzunk igazságosan egy tortán, egy csokin vagy egy kosár almán? Nézd meg a leckéket, aztán gyakorolj!</p></div>'+
     '<div class="hero-pies">'+[2,3,4].map(function(d){
-      return '<figure class="hero-pie">'+pie({sizes:eqSizes(d), on:[0], color:COLOR[d], label:FR[d].name})+'<figcaption>'+FR[d].name+' '+frac(d)+'</figcaption></figure>';
+      return '<figure class="hero-pie">'+pie({sizes:eqSizes(d), on:[0], color:COLOR[d], label:FR[d].name})+'<figcaption>'+FR[d].name+'</figcaption></figure>';
     }).join('')+'</div>'+
   '</section>'+
   '<div class="choices">'+
-    '<a class="bigcard" href="#tanulas"><span class="bigcard-ill">'+pie({sizes:eqSizes(4), on:[0], color:COLOR[4], label:'negyedekre vágott torta'})+bar({sizes:eqSizes(3), on:[1], color:COLOR[3], label:'harmadokra tört csoki'})+'</span>'+
+    '<a class="bigcard" href="#tanulas"><span class="bigcard-ill">'+pie({sizes:eqSizes(4), on:[0], color:COLOR[4], label:'négy darabra vágott torta'})+bar({sizes:eqSizes(3), on:[1], color:COLOR[3], label:'három darabra tört csoki'})+'</span>'+
       '<h2>Tanulás</h2><p>8 rövid lecke képekkel: mit jelent a fél, a harmad és a negyed?</p>'+resume+
       '<span class="btn primary">'+(state.lesson>0?'Folytatom':'Kezdjük!')+'</span></a>'+
     '<a class="bigcard" href="#gyakorlas"><span class="bigcard-ill">'+grid({rows:2, cols:3, on:[0,1,2], label:'félig kiszínezett csoki'})+starSVG('ill-star')+'</span>'+
@@ -720,10 +716,11 @@ function renderHome(){
   '</div>'+
   '<section class="card puska"><h2>Kis puska</h2><div class="puska-grid">'+[2,3,4].map(function(d){
     return '<div class="puska-item">'+pie({sizes:eqSizes(d), on:[0], color:COLOR[d], label:FR[d].name})+
-      '<h3>'+cap(FR[d].name)+' '+frac(d)+'</h3><p>'+cap(NUM[d])+' egyforma részből egy.</p><p class="hand">'+examples[d]+'</p></div>';
+      '<h3>'+cap(FR[d].name)+'</h3><p>'+cap(NUM[d])+' egyforma részből egy.</p><p class="hand">'+examples[d]+'</p></div>';
   }).join('')+'</div></section>'+
   '<section class="parents"><h2>Szülőknek</h2>'+
     '<p>Az alkalmazás csak a 2-es, 3-as és 4-es szorzótáblára épít. A „mennyi a 12 harmada?” típusú feladatoknál a gyerek tányérokra osztja a tárgyakat, és a szorzótáblából keresi a választ: 3 × ? = 12.</p>'+
+    '<p>Törteket és tört jelölést (például 1/2) nem használ, csak a fél, harmad, negyed szavakat és a „fele, harmada, negyede” kifejezéseket.</p>'+
     '<p>A Gyakorlásnál beállíthatod, melyik részekkel és milyen nehézségen dolgozzon. Érdemes csak a féllel kezdeni, aztán jöhet a harmad és a negyed. A csillagok csak ezen az eszközön, ebben a böngészőben tárolódnak.</p>'+
   '</section>';
   app.onclick = null;
@@ -745,9 +742,9 @@ function lessonCut(d){
   }[d];
   var btn = {2:'Vágjuk ketté!', 3:'Vágjuk háromfelé!', 4:'Vágjuk négyfelé!'}[d];
   var after = {
-    2:'Két egyforma darab lett. <b>Egy darab a torta fele.</b> Két fél együtt kiadja az egész tortát.',
-    3:'Három egyforma darab lett. <b>Egy darab a torta harmada.</b> Három harmad együtt kiadja az egész tortát.',
-    4:'Négy egyforma darab lett. <b>Egy darab a torta negyede.</b> Négy negyed együtt kiadja az egész tortát.'
+    2:'Két egyforma darab lett. <b>Egy darab a torta fele.</b> A két darab együtt kiadja az egész tortát.',
+    3:'Három egyforma darab lett. <b>Egy darab a torta harmada.</b> A három darab együtt kiadja az egész tortát.',
+    4:'Négy egyforma darab lett. <b>Egy darab a torta negyede.</b> A négy darab együtt kiadja az egész tortát.'
   }[d];
   var names = d === 4 ? '<div class="tip"><p class="hand">Figyeld meg!</p><p>A név elárulja, hány egyforma részre vágtunk: <b>2 rész: fél</b>, <b>3 rész: harmad</b>, <b>4 rész: negyed</b>.</p></div>' : '';
   return {
@@ -756,13 +753,12 @@ function lessonCut(d){
       '<p class="say">'+intro+'</p>'+
       '<div class="stage"><div class="pie-holder">'+pie({sizes:[1], color:COLOR[d], label:'egész torta'})+'</div>'+
       '<div class="stage-side"><button class="btn primary big" type="button" data-cut>'+btn+'</button><p class="count-label" aria-live="polite"></p><p class="stage-hint" hidden>Koppints a darabokra, és figyeld, mit írok ide!</p></div></div>'+
-      '<div class="reveal" hidden><p class="say">'+after+'</p>'+
-      '<div class="note">'+frac(d)+'<p>Így is írhatjuk. Úgy olvassuk: <b>'+FR[d].read+'</b>. Az alsó szám megmondja, hány egyforma részre vágtuk az egészet.</p></div>'+names+'</div>',
+      '<div class="reveal" hidden><p class="say">'+after+'</p>'+names+'</div>',
     bind: function(el){
       var holder = el.querySelector('.pie-holder'), label = el.querySelector('.count-label'), cut = el.querySelector('[data-cut]');
       function upd(){
         var c = holder.querySelectorAll('.piece.on').length;
-        label.textContent = c === 0 ? 'Egy darab sincs kiszínezve.' : c === d ? d+' '+FR[d].name+' = az egész torta!' : c+' '+FR[d].name;
+        label.textContent = c === 0 ? 'Egy darab sincs kiszínezve.' : c === d ? 'Mind a '+d+' darab = az egész torta!' : c === 1 ? '1 darab: a torta '+FR[d].poss : c+' darab';
       }
       cut.addEventListener('click', function(){
         holder.innerHTML = pie({sizes:eqSizes(d), on:[0], color:COLOR[d], interactive:true, label:NUM[d]+' egyforma darabra vágott torta'});
@@ -816,11 +812,11 @@ var LESSONS = [
         [2,3,4].map(function(d){ return '<button type="button" role="radio" aria-checked="'+(d===2)+'" data-d="'+d+'">'+d+'</button>'; }).join('')+'</div></div>'+
       '<div class="stage"><div class="pie-holder" id="l5pie"></div><p class="stage-cap" id="l5cap" aria-live="polite"></p></div>'+
       '<div class="compare-row">'+
-        '<figure>'+pie({sizes:eqSizes(2), on:[0], color:COLOR[2], label:'fél'})+'<figcaption>fél</figcaption></figure><span class="gt" aria-label="nagyobb, mint">&gt;</span>'+
-        '<figure>'+pie({sizes:eqSizes(3), on:[0], color:COLOR[3], label:'harmad'})+'<figcaption>harmad</figcaption></figure><span class="gt" aria-label="nagyobb, mint">&gt;</span>'+
-        '<figure>'+pie({sizes:eqSizes(4), on:[0], color:COLOR[4], label:'negyed'})+'<figcaption>negyed</figcaption></figure>'+
+        '<figure>'+pie({sizes:eqSizes(2), on:[0], color:COLOR[2], label:'a torta fele'})+'<figcaption>a fele</figcaption></figure><span class="gt" aria-label="nagyobb, mint">&gt;</span>'+
+        '<figure>'+pie({sizes:eqSizes(3), on:[0], color:COLOR[3], label:'a torta harmada'})+'<figcaption>a harmada</figcaption></figure><span class="gt" aria-label="nagyobb, mint">&gt;</span>'+
+        '<figure>'+pie({sizes:eqSizes(4), on:[0], color:COLOR[4], label:'a torta negyede'})+'<figcaption>a negyede</figcaption></figure>'+
       '</div>'+
-      '<p class="say">A fél nagyobb, mint a harmad. A harmad nagyobb, mint a negyed.</p>'+
+      '<p class="say">A torta fele nagyobb, mint a harmada. A harmada nagyobb, mint a negyede.</p>'+
       '<div class="tip"><p class="hand">Jó tanács</p><p>Ha nagyon éhes vagy, a torta felét kérd, ne a negyedét!</p></div>',
     bind: function(el){
       var holder = el.querySelector('#l5pie'), capEl = el.querySelector('#l5cap');
@@ -879,11 +875,11 @@ var LESSONS = [
     }
   }; },
   function(){ return {
-    title:'Rakjuk össze!',
+    title:'Négy egyforma csoki',
     html:
-      '<p class="say">Ez a törtfal. Minden sor ugyanolyan hosszú, mint az egész. Koppints a darabokra, és színezd ki őket!</p>'+
+      '<p class="say">Itt négy egyforma hosszú csoki van. A legfelsőt nem törtük el. Az alatta lévőt két egyforma darabra törtük, a következőt háromra, a legalsót négyre. Koppints a darabokra, és színezd ki őket!</p>'+
       '<div class="wall-holder">'+wall([1,2,3,4], true)+'</div>'+
-      '<ul class="facts"><li>2 fél = 1 egész</li><li>3 harmad = 1 egész</li><li>4 negyed = 1 egész</li><li>2 negyed = 1 fél<small>Nézd meg a falon!</small></li></ul>'+
+      '<ul class="facts"><li>2 egyforma darab<small>Egy darab a csoki fele.</small></li><li>3 egyforma darab<small>Egy darab a csoki harmada.</small></li><li>4 egyforma darab<small>Egy darab a csoki negyede.</small></li><li>Több darab, kisebb darab<small>A fele nagyobb, mint a negyede.</small></li></ul>'+
       '<div class="tip"><p class="hand">Kis puska</p><p><b>Fél:</b> 2 egyforma részre osztunk. <b>Harmad:</b> 3 részre. <b>Negyed:</b> 4 részre. Ha egy szám felét, harmadát vagy negyedét keresed, kérdezd meg a szorzótáblát: 2 × ? , 3 × ? vagy 4 × ?</p></div>',
     bind: function(el){
       el.querySelector('.wall').addEventListener('click', function(e){
@@ -923,7 +919,7 @@ function renderLessons(){
 /* ================= PRACTICE: question generators ================= */
 function dens(){ return state.settings.dens.slice().sort(); }
 function isHard(){ return !!state.settings.hard; }
-function fracOpt(d){ return {v:d, text:FR[d].name, html:frac(d)+'<span>'+FR[d].name+'</span>'}; }
+function partOpt(d){ return {v:d, text:'a '+FR[d].acc, html:'a '+FR[d].acc}; }
 function numOpt(v){ return {v:v, text:String(v), html:String(v)}; }
 function numOptions(ans, q, d){
   var cand = shuffle([ans+1, ans-1, ans+2, ans-2, q, q-ans, ans*2, ans+d].concat([2,3,4].filter(function(x){ return x!==d && q%x===0; }).map(function(x){ return q/x; })));
@@ -942,9 +938,9 @@ function genRecognize(){
   return {
     prompt:'Mekkora részét színeztük ki?',
     visual: shape(kind, n, {on:on, label:n+' részre osztott alakzat, '+m+' rész színes'}),
-    kind:'mc', options:[2,3,4].map(fracOpt), answer:d,
+    kind:'mc', options:[2,3,4].map(partOpt), answer:d,
     hint: m === 1 ? 'Számold meg: hány egyforma darabból áll az egész?' : 'Összesen '+n+' darab van, ebből '+m+' színes. Melyik igaz: 2 × '+m+' = '+n+', 3 × '+m+' = '+n+' vagy 4 × '+m+' = '+n+'?',
-    explain: m === 1 ? 'Az egész '+NUM[d]+' egyforma részből áll, és 1 rész színes. Ez egy '+FR[d].name+'.' : n+' egyforma rész van, ebből '+m+' színes. '+cap(az(n))+' '+n+' '+FR[d].poss+' '+m+', mert '+d+' × '+m+' = '+n+'. Tehát a színes rész az egész '+FR[d].poss+'.'
+    explain: m === 1 ? 'Az egész '+NUM[d]+' egyforma részből áll, és 1 rész színes. Ezért a '+FR[d].acc+' színeztük ki.' : n+' egyforma rész van, ebből '+m+' színes. '+cap(az(n))+' '+n+' '+FR[d].poss+' '+m+', mert '+d+' × '+m+' = '+n+'. Tehát a színes rész az egész '+FR[d].poss+'.'
   };
 }
 function genEqual(){
@@ -1018,7 +1014,7 @@ function genCmpShape(){
     visual:'', kind:'mc', optClass:'shapes', answer:ans,
     options: ab.map(function(x){ return {v:x, text:'a '+thing+' '+FR[x].poss, html:'<span class="opt-shape">'+pie({sizes:eqSizes(x), on:[0], label:FR[x].name})+'</span><span>a '+thing+' '+FR[x].poss+'</span>'}; }),
     hint:'Melyiket vágták kevesebb darabra? Annak nagyobbak a darabjai.',
-    explain: cap(FR[lo].name)+': '+NUM[lo]+' darabra vágtuk. '+cap(FR[hi].name)+': '+NUM[hi]+' darabra vágtuk. Minél több darabra vágjuk, annál kisebb egy darab. Tehát a '+FR[ans].name+' a '+word+'.'
+    explain: 'Ha a '+ACC[thing]+' '+NUM[lo]+' darabra vágjuk, egy darab a '+FR[lo].poss+'. Ha '+NUM[hi]+' darabra, egy darab a '+FR[hi].poss+'. Minél több darabra vágjuk, annál kisebb egy darab. Tehát a '+thing+' '+FR[ans].poss+' a '+word+'.'
   };
 }
 function genCmpNum(){
@@ -1036,34 +1032,15 @@ function genCmpNum(){
   };
 }
 function genWhole(){
-  var ds = dens(), both = ds.indexOf(2) >= 0 && ds.indexOf(4) >= 0;
-  var v = both && Math.random() < 0.4 ? pick(['qInHalf','twoQ']) : 'count';
-  if (v === 'count'){
-    var d = pick(ds);
-    return {
-      prompt:'Hány '+FR[d].name+' van egy egészben?',
-      visual: pie({sizes:[1], label:'egész torta'}),
-      kind:'mc', optClass:'nums', options:[1,2,3,4].map(numOpt), answer:d,
-      hint:'Képzeld el, hogy a tortát '+FR[d].cut+' vágod! Hány darab lesz?',
-      explain: cap(NUM[d])+' '+FR[d].name+' van egy egészben: '+Array(d).fill(FR[d].name).join(' + ')+' = 1 egész.',
-      mount:function(card){ this.vis = card.querySelector('.visual'); },
-      onHint:function(){ this.vis.innerHTML = pie({sizes:eqSizes(d), label:NUM[d]+' darabra vágott torta'}); },
-      onDone:function(){ this.vis.innerHTML = pie({sizes:eqSizes(d), on:range(d), color:COLOR[d], label:NUM[d]+' darabra vágott torta'}); }
-    };
-  }
-  if (v === 'qInHalf') return {
-    prompt:'Hány negyed van egy félben?',
-    visual: wall([2,4], false),
-    kind:'mc', optClass:'nums', options:[1,2,3,4].map(numOpt), answer:2,
-    hint:'Nézd meg a képet: hány negyed fér el pontosan egy fél alatt?',
-    explain:'Két negyed van egy félben. 2 negyed pont olyan hosszú, mint 1 fél.'
-  };
+  var d = pick(dens()), thing = pick(['torta','pizza']);
   return {
-    prompt:'Két negyed ugyanannyi, mint egy…',
-    visual: wall([1,2,4], false),
-    kind:'mc', options:[{v:2, text:'fél', html:'fél'}, {v:3, text:'harmad', html:'harmad'}, {v:1, text:'egész', html:'egész'}], answer:2,
-    hint:'Keresd meg a falon: mi olyan hosszú, mint két negyed egymás mellett?',
-    explain:'Két negyed együtt pont egy fél: negyed + negyed = fél.'
+    prompt:'Egy darab a '+thing+' '+FR[d].poss+'. Hány egyforma darabra vágtuk?',
+    visual: pie({sizes:[1], label:'egész '+thing}),
+    kind:'mc', optClass:'nums', options:[1,2,3,4].map(numOpt), answer:d,
+    hint:'Emlékezz: ha két darabra vágjuk, egy darab a fele. Ha háromra, a harmada. Ha négyre, a negyede.',
+    explain:'Ha egy darab a '+thing+' '+FR[d].poss+', akkor '+NUM[d]+' egyforma darabra vágtuk.',
+    mount:function(card){ this.vis = card.querySelector('.visual'); },
+    onDone:function(){ this.vis.innerHTML = pie({sizes:eqSizes(d), on:[0], color:COLOR[d], label:NUM[d]+' darabra vágott '+thing}); }
   };
 }
 var GENS = {
@@ -1223,7 +1200,7 @@ function renderQuestion(){
 function renderResult(){
   var s = round.score, n = round.n;
   var stars = s >= 9 ? 3 : s >= 6 ? 2 : 1;
-  var msg = s === n ? 'Hibátlan! Igazi törtbajnok vagy!' : s >= 8 ? 'Nagyon ügyes vagy!' : s >= 5 ? 'Szép munka! Még egy kör, és még jobban fog menni.' : 'Jó úton jársz! Nézd meg újra a leckéket, aztán próbáld újra.';
+  var msg = s === n ? 'Hibátlan! Igazi osztozkodó bajnok vagy!' : s >= 8 ? 'Nagyon ügyes vagy!' : s >= 5 ? 'Szép munka! Még egy kör, és még jobban fog menni.' : 'Jó úton jársz! Nézd meg újra a leckéket, aztán próbáld újra.';
   app.innerHTML =
     '<section class="card result">'+
       '<div class="result-stars" aria-label="'+stars+' csillag a háromból">'+[0,1,2].map(function(i){ return starSVG(i < stars ? '' : 'off'); }).join('')+'</div>'+
