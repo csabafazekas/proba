@@ -1,0 +1,1132 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fél, harmad, negyed</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap">
+<style>
+:root{
+  /* Layout: one column laid on squared exercise-book paper; chunky cards and big touch targets for a young reader. Each fraction keeps its own colour everywhere in the lessons. */
+  --paper:#FAFBF6;
+  --grid:#E2E9F2;
+  --card:#FFFFFF;
+  --ink:#1F2B45;
+  --ink-soft:#56627A;
+  --border:#1F2B45;
+  --border-soft:#B7C2D4;
+  --shadow:#1F2B45;
+  --line:#1F2B45;
+  --piece:#FFFFFF;
+  --piece-hover:#EAF1FB;
+  --half:#F28A2E;
+  --third:#14A39A;
+  --quarter:#9A6FE0;
+  --whole:#E8B84A;
+  --pencil:#3B82E0;
+  --on-color:#1A2236;
+  --teacher:#C8423A;
+  --good:#1E8F52; --good-bg:#E4F5EA;
+  --bad:#CF3E3E;  --bad-bg:#FCE9E7;
+  --try:#B07A00;  --try-bg:#FFF4D2;
+  --star:#F4B400;
+  --btn-bg:#1F2B45; --btn-fg:#FFFFFF;
+  --focus:#3B82E0;
+  --plate:#F0F4F9;
+  --apple:#E0473C; --leaf:#3C9A47; --stem:#6B4A2B;
+  --cookie:#E3AA4C; --cookie-line:#A86F1E;
+  --marble:#3B82E0; --shine:#FFFFFF; --kid:#7A8FB8; --item-line:#2A2F3A;
+  --font-display:"Fredoka","Nunito",system-ui,sans-serif;
+  --font-body:"Nunito",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-hand:"Patrick Hand","Comic Sans MS","Chalkboard SE",cursive;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#131A29; --grid:#1B2436; --card:#1B2438; --ink:#EDF1F9; --ink-soft:#A6B1C6;
+    --border:#3A4868; --border-soft:#46547A; --shadow:#090D16; --line:#DDE4F1;
+    --piece:#26314A; --piece-hover:#2F3C59;
+    --half:#F79A45; --third:#2BBBB1; --quarter:#AE8BF0; --whole:#EDC25C; --pencil:#5D9DF2;
+    --on-color:#141B2B; --teacher:#FF8D7E;
+    --good:#4CC384; --good-bg:#16352A; --bad:#F07171; --bad-bg:#3A1E24; --try:#F2C14E; --try-bg:#3A3119;
+    --star:#F7C531; --btn-bg:#F2C14E; --btn-fg:#151B29; --focus:#7FB2F7; --plate:#222C42;
+    --apple:#E8574C; --leaf:#4DB35A; --stem:#C9A27C; --cookie:#E6B45C; --cookie-line:#9C6619;
+    --marble:#5D9DF2; --shine:#FFFFFF; --kid:#8FA3CC; --item-line:#0B0E15;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131A29; --grid:#1B2436; --card:#1B2438; --ink:#EDF1F9; --ink-soft:#A6B1C6;
+  --border:#3A4868; --border-soft:#46547A; --shadow:#090D16; --line:#DDE4F1;
+  --piece:#26314A; --piece-hover:#2F3C59;
+  --half:#F79A45; --third:#2BBBB1; --quarter:#AE8BF0; --whole:#EDC25C; --pencil:#5D9DF2;
+  --on-color:#141B2B; --teacher:#FF8D7E;
+  --good:#4CC384; --good-bg:#16352A; --bad:#F07171; --bad-bg:#3A1E24; --try:#F2C14E; --try-bg:#3A3119;
+  --star:#F7C531; --btn-bg:#F2C14E; --btn-fg:#151B29; --focus:#7FB2F7; --plate:#222C42;
+  --apple:#E8574C; --leaf:#4DB35A; --stem:#C9A27C; --cookie:#E6B45C; --cookie-line:#9C6619;
+  --marble:#5D9DF2; --shine:#FFFFFF; --kid:#8FA3CC; --item-line:#0B0E15;
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1.5px,transparent 1.5px),linear-gradient(90deg,var(--grid) 1.5px,transparent 1.5px);
+  background-size:28px 28px;
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:18px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--font-display);font-weight:600;line-height:1.15;text-wrap:balance;margin:0}
+p{margin:0}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+b{font-weight:800}
+
+.wrap{
+  max-width:800px;margin:0 auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:14px 56px;
+}
+
+/* ---------- top bar ---------- */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:4px 20px}
+.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--font-display);font-weight:600;font-size:1.15rem;min-width:0}
+.brand svg{width:36px;height:36px;flex:none}
+.top-tools{display:flex;align-items:center;gap:10px}
+.starpill{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:2px solid var(--border);border-radius:999px;padding:5px 14px 5px 8px;font-family:var(--font-display);font-weight:600;font-size:1.1rem;font-variant-numeric:tabular-nums;box-shadow:0 3px 0 var(--shadow)}
+.starpill svg{width:24px;height:24px}
+.starpill.bump{animation:bump .55s ease}
+@keyframes bump{35%{transform:scale(1.22) rotate(-6deg)}}
+.iconbtn{width:46px;height:46px;flex:none;display:grid;place-items:center;border:2px solid var(--border);border-radius:14px;background:var(--card);box-shadow:0 3px 0 var(--shadow);cursor:pointer;padding:0}
+.iconbtn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--shadow)}
+.iconbtn svg{width:24px;height:24px}
+body:not(.can-speak) .speak-btn{display:none}
+@media (max-width:440px){.brand span{display:none}}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-display);font-weight:600;font-size:1.12rem;line-height:1.1;border:2px solid var(--border);border-radius:16px;padding:13px 22px;min-height:52px;background:var(--card);color:var(--ink);box-shadow:0 4px 0 var(--shadow);cursor:pointer;text-decoration:none;transition:transform .08s ease,box-shadow .08s ease}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--shadow)}
+.btn.primary{background:var(--btn-bg);color:var(--btn-fg)}
+.btn.small{min-height:44px;padding:8px 16px;font-size:1rem}
+.btn.big{font-size:1.25rem;padding:16px 30px;min-height:60px}
+.btn.plain{background:transparent;box-shadow:none;border-color:transparent;padding-inline:6px;text-decoration:underline;text-underline-offset:4px}
+.btn.plain:active{transform:none}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+
+/* ---------- shared shapes ---------- */
+.shape{display:block;width:100%;height:auto;overflow:visible}
+.shape .piece{fill:var(--piece);stroke:var(--line);stroke-width:3;stroke-linejoin:round;transition:fill .2s ease,transform .35s cubic-bezier(.3,1.4,.5,1)}
+.shape .piece.on{fill:var(--c)}
+.shape .piece.out{transform:translate(var(--dx),var(--dy))}
+.shape .outline{fill:none;stroke:var(--line);stroke-width:3}
+.shape.interactive .piece{cursor:pointer}
+@media (hover:hover){.shape.interactive .piece:not(.on):hover{fill:var(--piece-hover)}}
+.shape .piece:focus,.wall-piece:focus{outline:none}
+.shape .piece:focus-visible{stroke:var(--focus);stroke-width:6}
+.shape.locked{pointer-events:none}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1;font-family:var(--font-display);font-weight:600;font-size:.82em;margin:0 .12em}
+.frac>span:first-child{border-bottom:2.5px solid currentColor;padding:0 .2em .1em}
+.frac>span:last-child{padding-top:.1em}
+
+/* ---------- home ---------- */
+.hero{display:grid;gap:22px;padding-block:6px 30px;align-items:center}
+@media (min-width:700px){.hero{grid-template-columns:1fr auto}}
+.hero h1{font-size:clamp(2.3rem,7.5vw,3.5rem);font-weight:700;letter-spacing:-.01em}
+.hero h1 .mk{padding:0 .06em;border-radius:.12em}
+.hero h1 .mk-half{box-shadow:inset 0 -.24em 0 var(--half)}
+.hero h1 .mk-third{box-shadow:inset 0 -.24em 0 var(--third)}
+.hero h1 .mk-quarter{box-shadow:inset 0 -.24em 0 var(--quarter)}
+.hero .lead{font-size:1.15rem;color:var(--ink-soft);max-width:38ch;margin-top:12px}
+.hero-pies{display:flex;gap:clamp(12px,3.5vw,22px);flex-wrap:wrap}
+.hero-pie{display:grid;justify-items:center;gap:8px;width:clamp(84px,24vw,112px);margin:0}
+.hero-pie figcaption{font-family:var(--font-display);font-weight:600;font-size:1.15rem;display:inline-flex;gap:6px;align-items:center}
+
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.bigcard{display:grid;gap:10px;align-content:start;text-decoration:none;background:var(--card);border:2px solid var(--border);border-radius:24px;box-shadow:0 5px 0 var(--shadow);padding:22px;transition:transform .12s ease}
+@media (hover:hover){.bigcard:hover{transform:translateY(-3px)}}
+.bigcard h2{font-size:1.75rem}
+.bigcard p{color:var(--ink-soft)}
+.bigcard .btn{justify-self:start;margin-top:6px}
+.bigcard-ill{height:80px;display:flex;align-items:center;gap:14px}
+.bigcard-ill>svg{flex:none;height:auto}
+.bigcard-ill .pie{width:76px}
+.bigcard-ill .bar{width:150px}
+.bigcard-ill .grid{width:120px}
+.bigcard-ill .ill-star{width:58px}
+.bigcard .resume{font-family:var(--font-hand);font-size:1.2rem;color:var(--teacher)}
+
+.card{background:var(--card);border:2px solid var(--border);border-radius:24px;box-shadow:0 5px 0 var(--shadow);padding:clamp(18px,4vw,28px)}
+.puska{margin-top:24px;display:grid;gap:16px}
+.puska h2{font-size:1.5rem}
+.puska-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+.puska-item{display:grid;grid-template-columns:62px 1fr;gap:2px 14px;align-items:center}
+.puska-item .shape{grid-row:span 3;width:62px}
+.puska-item h3{font-size:1.3rem;display:flex;align-items:center;gap:6px}
+.puska-item p{font-size:.98rem;color:var(--ink-soft);line-height:1.35}
+.puska-item .hand{font-family:var(--font-hand);font-size:1.12rem;color:var(--teacher);line-height:1.25}
+.nowrap{white-space:nowrap}
+.parents{margin-top:26px;display:grid;gap:6px;color:var(--ink-soft);font-size:.98rem;max-width:62ch}
+.parents h2{font-family:var(--font-hand);font-weight:400;font-size:1.45rem;color:var(--teacher)}
+
+/* ---------- lessons ---------- */
+.lesson-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.lesson-nav button{width:46px;height:46px;border-radius:50%;border:2px solid var(--border);background:var(--card);font-family:var(--font-display);font-weight:600;font-size:1.1rem;cursor:pointer;padding:0}
+.lesson-nav button[aria-current="step"]{background:var(--btn-bg);color:var(--btn-fg)}
+.lesson{display:grid;gap:20px}
+.lesson-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.lesson-no{font-family:var(--font-hand);font-size:1.3rem;color:var(--teacher)}
+.lesson h2{font-size:clamp(1.7rem,5.5vw,2.3rem)}
+.say{font-size:1.16rem;max-width:60ch}
+.ask{font-family:var(--font-display);font-weight:600;font-size:1.35rem}
+.stage{display:flex;align-items:center;justify-content:center;gap:20px 32px;flex-wrap:wrap}
+.pie-holder{width:min(250px,68vw)}
+.stage-side{display:grid;gap:10px;justify-items:center;min-width:0;max-width:260px;text-align:center}
+.count-label{font-family:var(--font-display);font-size:1.5rem;font-weight:600;min-height:1.3em}
+.stage-hint{color:var(--ink-soft);font-size:1rem}
+.reveal{display:grid;gap:16px}
+.note{display:flex;gap:18px;align-items:center;padding:14px 18px;background:var(--plate);border-radius:18px}
+.note .frac{font-size:2.3rem;flex:none}
+.tip{padding:14px 18px;border:2px dashed var(--border-soft);border-radius:18px;display:grid;gap:4px}
+.tip .hand{font-family:var(--font-hand);font-size:1.4rem;color:var(--teacher);line-height:1.1}
+.figure{display:grid;justify-items:center;gap:6px;margin:0}
+.figure .shape.bar{width:min(380px,100%)}
+.caption{color:var(--ink-soft);font-size:1rem}
+.fb-line{font-family:var(--font-display);font-weight:600;font-size:1.3rem}
+.fb-line.ok{color:var(--good)}
+.fb-line.no{color:var(--bad)}
+.seg-wrap{display:grid;gap:10px;justify-items:center}
+.seg-title{font-weight:800}
+.seg{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.seg button{min-width:66px;min-height:54px;border:2px solid var(--border);border-radius:16px;background:var(--card);font-family:var(--font-display);font-weight:600;font-size:1.25rem;cursor:pointer;box-shadow:0 3px 0 var(--shadow);display:grid;justify-items:center;align-content:center;padding:6px 16px;line-height:1.1}
+.seg button small{font-family:var(--font-body);font-size:.8rem;font-weight:700;color:var(--ink-soft)}
+.seg button[aria-checked="true"]{background:var(--btn-bg);color:var(--btn-fg)}
+.seg button[aria-checked="true"] small{color:inherit;opacity:.85}
+.stage-cap{font-family:var(--font-display);font-weight:600;font-size:1.3rem;text-align:center}
+.compare-row{display:flex;align-items:center;justify-content:center;gap:8px 12px;flex-wrap:wrap}
+.compare-row figure{margin:0;display:grid;justify-items:center;gap:4px;width:clamp(78px,21vw,112px)}
+.compare-row figcaption{font-family:var(--font-display);font-weight:600}
+.compare-row .gt{font-family:var(--font-display);font-size:2.2rem;font-weight:700;color:var(--ink-soft)}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.result-line{font-size:1.2rem;text-align:center;min-height:1.6em}
+.facts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.facts li{font-family:var(--font-display);font-weight:600;font-size:1.2rem;padding:10px 14px;background:var(--plate);border-radius:14px}
+.facts li small{display:block;font-family:var(--font-body);font-weight:600;font-size:.85rem;color:var(--ink-soft)}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:20px;flex-wrap:wrap}
+
+/* ---------- distribution picture ---------- */
+.dist-holder{width:100%}
+.dist{display:block;width:100%;height:auto;margin:0 auto}
+.dist .basket{fill:none;stroke:var(--border-soft);stroke-width:2.5;stroke-dasharray:6 7}
+.dist .plate{fill:var(--plate);stroke:var(--border-soft);stroke-width:2.5;stroke-dasharray:9 8;transition:stroke .3s}
+.dist.split .plate{stroke:var(--line);stroke-dasharray:none}
+.dist .item{transition:transform .55s cubic-bezier(.34,1.35,.5,1)}
+.dist .plate-count{font-family:var(--font-display);font-weight:600;font-size:28px;fill:var(--ink);opacity:0;transition:opacity .3s}
+.dist.done .plate-count{opacity:1}
+.i-apple{fill:var(--apple);stroke:var(--item-line);stroke-width:1.5}
+.i-stem{stroke:var(--stem);stroke-width:2.6;fill:none;stroke-linecap:round}
+.i-leaf{fill:var(--leaf);stroke:var(--item-line);stroke-width:1}
+.i-cookie{fill:var(--cookie);stroke:var(--item-line);stroke-width:1.5}
+.i-cookie-line{stroke:var(--cookie-line);stroke-width:1.8;fill:none;stroke-linecap:round}
+.i-marble{fill:var(--marble);stroke:var(--item-line);stroke-width:1.5}
+.i-shine{fill:var(--shine);opacity:.75}
+.i-star{fill:var(--star);stroke:var(--item-line);stroke-width:1.3;stroke-linejoin:round}
+.i-kid{fill:var(--kid);stroke:var(--item-line);stroke-width:1.3}
+
+/* ---------- fraction wall ---------- */
+.wall{display:block;width:100%;height:auto}
+.wall-piece rect{fill:var(--c);fill-opacity:.24;stroke:var(--line);stroke-width:2;transition:fill-opacity .2s}
+.wall-piece.on rect{fill-opacity:1}
+.wall-piece text{font-family:var(--font-display);font-weight:600;font-size:22px;fill:var(--ink);pointer-events:none}
+.wall-piece.on text{fill:var(--on-color)}
+.wall.interactive .wall-piece{cursor:pointer}
+.wall-piece:focus-visible{outline:none}
+.wall-piece:focus-visible rect{stroke:var(--focus);stroke-width:5}
+
+/* ---------- practice setup ---------- */
+.page-title{font-size:clamp(2rem,6vw,2.7rem);margin-bottom:18px}
+.setup{display:grid;gap:26px}
+fieldset{border:0;padding:0;margin:0;min-width:0}
+legend{font-family:var(--font-display);font-weight:600;font-size:1.3rem;padding:0;margin-bottom:12px}
+.choices-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.choices-row.dens{grid-template-columns:repeat(3,minmax(0,1fr))}
+.choice{position:relative;display:block;cursor:pointer}
+.choice input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.choice>span{display:grid;gap:3px;height:100%;padding:13px 40px 13px 15px;border:2px solid var(--border-soft);border-radius:16px;background:var(--card);transition:background .15s}
+.choice b{font-family:var(--font-display);font-weight:600;font-size:1.18rem}
+.choice small{color:var(--ink-soft);font-size:.93rem;line-height:1.35}
+.choice>span::after{content:"";position:absolute;top:12px;right:12px;width:20px;height:20px;border-radius:50%;border:2px solid var(--border-soft)}
+.choice input:checked+span{border-color:var(--border);box-shadow:0 4px 0 var(--shadow);background:var(--plate)}
+.choice input:checked+span::after{border-color:var(--border);background:var(--btn-bg);box-shadow:inset 0 0 0 3px var(--plate)}
+.choice input:focus-visible+span{outline:3px solid var(--focus);outline-offset:2px}
+.choice .den{display:flex;align-items:center;gap:8px;padding-right:36px}
+.choice .dot{width:14px;height:14px;border-radius:50%;flex:none}
+.warn{color:var(--bad);font-weight:700;margin-top:8px}
+
+/* ---------- quiz ---------- */
+.quiz-top{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.bar-track{flex:1;height:16px;border-radius:999px;background:var(--card);border:2px solid var(--border);overflow:hidden}
+.bar-fill{height:100%;background:var(--third);transition:width .4s ease}
+.quiz-count{font-family:var(--font-display);font-weight:600;font-variant-numeric:tabular-nums;min-width:3em;text-align:right}
+.qcard{display:grid;gap:18px}
+.qhead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.prompt{font-size:clamp(1.45rem,4.8vw,1.95rem);font-weight:600}
+.qsub{color:var(--ink-soft);margin-top:-6px}
+.visual{display:flex;justify-content:center}
+.visual .shape.pie{width:min(250px,70vw)}
+.visual .shape.bar{width:min(420px,100%)}
+.visual .shape.grid{width:min(var(--gw,300px),100%)}
+.visual .wall{max-width:520px}
+.options{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+.options.two{grid-template-columns:1fr 1fr}
+.opt{position:relative;min-height:66px;border:2px solid var(--border);border-radius:18px;background:var(--card);box-shadow:0 4px 0 var(--shadow);font-family:var(--font-display);font-weight:600;font-size:1.35rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 14px;line-height:1.15;transition:transform .08s ease,box-shadow .08s ease,background .2s}
+.opt:active{transform:translateY(3px);box-shadow:0 1px 0 var(--shadow)}
+.opt[disabled]{cursor:default;transform:none}
+.opt.correct{background:var(--good-bg);border-color:var(--good);box-shadow:0 4px 0 var(--good)}
+.opt.wrong{background:var(--bad-bg);border-color:var(--bad);box-shadow:0 4px 0 var(--bad)}
+.opt.correct::after,.opt.wrong::after{position:absolute;top:6px;right:10px;font-size:1.1rem;font-family:var(--font-body);font-weight:800}
+.opt.correct::after{content:"✓";color:var(--good)}
+.opt.wrong::after{content:"✗";color:var(--bad)}
+.opt.faded{opacity:.55}
+.options.nums .opt{font-size:1.9rem;font-variant-numeric:tabular-nums}
+.options.shapes .opt{flex-direction:column;padding:14px 10px;font-size:1.15rem}
+.opt-shape{width:min(120px,30vw);display:block}
+.color-actions,.qtools{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.feedback{border-radius:18px;padding:14px 18px;border:2px solid var(--border-soft);display:grid;gap:6px;background:var(--plate)}
+.feedback.good{background:var(--good-bg);border-color:var(--good)}
+.feedback.bad{background:var(--bad-bg);border-color:var(--bad)}
+.feedback.try{background:var(--try-bg);border-color:var(--try)}
+.fb-title{font-family:var(--font-display);font-weight:600;font-size:1.35rem}
+.feedback.good .fb-title{color:var(--good)}
+.feedback.bad .fb-title{color:var(--bad)}
+.feedback.try .fb-title{color:var(--try)}
+.quiz-next{display:flex;justify-content:flex-end;margin-top:18px}
+
+/* ---------- result ---------- */
+.result{text-align:center;display:grid;gap:16px;justify-items:center;padding-block:10px}
+.result-stars{display:flex;gap:12px}
+.result-stars svg{width:clamp(60px,18vw,84px);height:auto;animation:pop .5s cubic-bezier(.3,1.6,.5,1) both}
+.result-stars svg:nth-child(2){animation-delay:.15s}
+.result-stars svg:nth-child(3){animation-delay:.3s}
+.result-stars .off polygon{fill:var(--plate);stroke:var(--border-soft)}
+@keyframes pop{from{transform:scale(.2);opacity:0}}
+.result h1{font-size:clamp(2rem,6vw,2.8rem)}
+.result .score{font-size:1.3rem}
+.result .total{color:var(--ink-soft)}
+.result-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-delay:0s!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="#" id="brand" aria-label="Főoldal"></a>
+    <div class="top-tools">
+      <span class="starpill" id="starPill" title="Összegyűjtött csillagok"><span id="starIcon"></span><span id="starCount">0</span></span>
+      <button class="iconbtn" id="soundBtn" type="button"></button>
+    </div>
+  </header>
+  <main id="app"></main>
+</div>
+<script>
+(function(){
+'use strict';
+document.documentElement.lang = 'hu';
+var app = document.getElementById('app');
+
+/* ================= storage ================= */
+var KEY = 'fhn:';
+function load(k, d){ try{ var v = localStorage.getItem(KEY+k); return v === null ? d : JSON.parse(v); }catch(e){ return d; } }
+function save(k, v){ try{ localStorage.setItem(KEY+k, JSON.stringify(v)); }catch(e){} }
+
+var state = {
+  stars: +load('stars', 0) || 0,
+  sound: load('sound', true) !== false,
+  lesson: load('lesson', 0),
+  settings: Object.assign({mode:'mix', dens:[2,3,4], hard:false}, load('settings', {}) || {})
+};
+if (!Array.isArray(state.settings.dens) || !state.settings.dens.length) state.settings.dens = [2,3,4];
+state.settings.dens = state.settings.dens.map(Number).filter(function(d){ return d===2||d===3||d===4; });
+if (!state.settings.dens.length) state.settings.dens = [2,3,4];
+if (['forms','numbers','mix'].indexOf(state.settings.mode) < 0) state.settings.mode = 'mix';
+
+/* ================= helpers ================= */
+function rnd(a,b){ return a + Math.floor(Math.random()*(b-a+1)); }
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+function shuffle(a){ a = a.slice(); for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+function range(n){ var r=[]; for(var i=0;i<n;i++) r.push(i); return r; }
+function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+function az(n){ return (n===1 || n===5 || (n>=50 && n<60)) ? 'az' : 'a'; }
+function gcd(a,b){ return b ? gcd(b, a%b) : a; }
+var NUM = {1:'egy', 2:'két', 3:'három', 4:'négy'};
+var FR = {
+  2:{name:'fél',    poss:'fele',    acc:'felét',    read:'egy ketted, vagy egyszerűen fél', cut:'ketté'},
+  3:{name:'harmad', poss:'harmada', acc:'harmadát', read:'egy harmad', cut:'háromfelé'},
+  4:{name:'negyed', poss:'negyede', acc:'negyedét', read:'egy negyed', cut:'négyfelé'}
+};
+var COLOR = {1:'var(--whole)', 2:'var(--half)', 3:'var(--third)', 4:'var(--quarter)'};
+var PENCIL = 'var(--pencil)';
+function eqSizes(n){ var a=[]; for(var i=0;i<n;i++) a.push(1/n); return a; }
+/* unequal cuts: no piece is close to 1/d, so "not equal" is always visibly true */
+var UNEQ = {
+  2:[[.36,.64],[.62,.38],[.3,.7]],
+  3:[[.2,.25,.55],[.5,.24,.26],[.16,.6,.24]],
+  4:[[.12,.16,.36,.36],[.4,.12,.32,.16],[.18,.38,.12,.32]]
+};
+function frac(d){ return '<span class="frac" aria-label="'+FR[d].read.split(',')[0]+'"><span>1</span><span>'+d+'</span></span>'; }
+function esc(s){ return String(s).replace(/<[^>]*>/g,''); }
+
+/* ================= SVG builders ================= */
+var uid = 0;
+function sector(cx,cy,r,a0,a1){
+  if (a1-a0 > 0.9999) return 'M'+cx+','+(cy-r)+'A'+r+','+r+' 0 1 1 '+cx+','+(cy+r)+'A'+r+','+r+' 0 1 1 '+cx+','+(cy-r)+'Z';
+  function P(t){ return [(cx + r*Math.sin(2*Math.PI*t)).toFixed(2), (cy - r*Math.cos(2*Math.PI*t)).toFixed(2)]; }
+  var p0 = P(a0), p1 = P(a1);
+  return 'M'+cx+','+cy+'L'+p0[0]+','+p0[1]+'A'+r+','+r+' 0 '+(a1-a0>0.5?1:0)+' 1 '+p1[0]+','+p1[1]+'Z';
+}
+function pieceAttrs(i, on, interactive){
+  return 'class="piece'+(on?' on':'')+'" data-i="'+i+'"' + (interactive ? ' tabindex="0" role="button" aria-pressed="'+on+'" aria-label="'+(i+1)+'. darab"' : '');
+}
+function pie(o){
+  var sizes=o.sizes, on=o.on||[], color=o.color||PENCIL, inter=!!o.interactive, a=0, out='';
+  sizes.forEach(function(s,i){
+    var mid=a+s/2, dx=(Math.sin(2*Math.PI*mid)*9).toFixed(1), dy=(-Math.cos(2*Math.PI*mid)*9).toFixed(1);
+    var isOn = on.indexOf(i) >= 0;
+    out += '<path '+pieceAttrs(i,isOn,inter)+' style="--dx:'+dx+'px;--dy:'+dy+'px" d="'+sector(100,100,88,a,a+s)+'"/>';
+    a += s;
+  });
+  return '<svg class="shape pie'+(inter?' interactive':'')+'" viewBox="-6 -6 212 212" style="--c:'+color+'" role="'+(inter?'group':'img')+'" aria-label="'+(o.label||'kör')+'">'+out+'</svg>';
+}
+function bar(o){
+  var sizes=o.sizes, on=o.on||[], color=o.color||PENCIL, inter=!!o.interactive, id='cl'+(++uid);
+  var X=4, Y=4, W=312, H=112, x=X, out='';
+  sizes.forEach(function(s,i){ var w=s*W; out += '<rect '+pieceAttrs(i,on.indexOf(i)>=0,inter)+' x="'+x.toFixed(2)+'" y="'+Y+'" width="'+w.toFixed(2)+'" height="'+H+'"/>'; x+=w; });
+  return '<svg class="shape bar'+(inter?' interactive':'')+'" viewBox="0 0 320 120" style="--c:'+color+'" role="'+(inter?'group':'img')+'" aria-label="'+(o.label||'csoki')+'"><defs><clipPath id="'+id+'"><rect x="'+X+'" y="'+Y+'" width="'+W+'" height="'+H+'" rx="12"/></clipPath></defs><g clip-path="url(#'+id+')">'+out+'</g><rect class="outline" x="'+X+'" y="'+Y+'" width="'+W+'" height="'+H+'" rx="12"/></svg>';
+}
+var GRIDS = {2:[1,2], 3:[1,3], 4:[2,2], 6:[2,3], 8:[2,4], 9:[3,3], 12:[3,4]};
+function grid(o){
+  var rows=o.rows, cols=o.cols, on=o.on||[], color=o.color||PENCIL, inter=!!o.interactive, id='cl'+(++uid);
+  var c=56, X=4, Y=4, W=cols*c, H=rows*c, out='';
+  for (var r=0;r<rows;r++) for (var k=0;k<cols;k++){ var i=r*cols+k; out += '<rect '+pieceAttrs(i,on.indexOf(i)>=0,inter)+' x="'+(X+k*c)+'" y="'+(Y+r*c)+'" width="'+c+'" height="'+c+'"/>'; }
+  return '<svg class="shape grid'+(inter?' interactive':'')+'" viewBox="0 0 '+(W+8)+' '+(H+8)+'" style="--c:'+color+';--gw:'+(cols*78)+'px" role="'+(inter?'group':'img')+'" aria-label="'+(o.label||'csokitábla')+'"><defs><clipPath id="'+id+'"><rect x="'+X+'" y="'+Y+'" width="'+W+'" height="'+H+'" rx="12"/></clipPath></defs><g clip-path="url(#'+id+')">'+out+'</g><rect class="outline" x="'+X+'" y="'+Y+'" width="'+W+'" height="'+H+'" rx="12"/></svg>';
+}
+function shape(kind, n, o){
+  o = Object.assign({}, o);
+  if (kind === 'pie'){ o.sizes = o.sizes || eqSizes(n); return pie(o); }
+  if (kind === 'bar'){ o.sizes = o.sizes || eqSizes(n); return bar(o); }
+  o.rows = GRIDS[n][0]; o.cols = GRIDS[n][1]; return grid(o);
+}
+function starPoints(r1,r2){ var p=[]; for (var i=0;i<10;i++){ var r=i%2?r2:r1, t=Math.PI*i/5; p.push((r*Math.sin(t)).toFixed(1)+','+(-r*Math.cos(t)).toFixed(1)); } return p.join(' '); }
+var STAR = starPoints(16,7);
+function starSVG(cls){ return '<svg class="'+(cls||'')+'" viewBox="-19 -19 38 38" aria-hidden="true"><polygon class="i-star" points="'+STAR+'"/></svg>'; }
+
+var ITEM = {
+  apple:'<path class="i-apple" d="M0,-8C-6,-14,-17,-10,-16,1C-15,11,-8,16,0,13C8,16,15,11,16,1C17,-10,6,-14,0,-8Z"/><path class="i-stem" d="M0,-8L2,-16"/><path class="i-leaf" d="M2,-14C6,-20,12,-19,14,-16C10,-12,5,-12,2,-14Z"/>',
+  cookie:'<circle class="i-cookie" r="15"/><path class="i-cookie-line" d="M-8,-2L2,8M-2,-8L8,2M-8,2L2,-8M-2,8L8,-2"/>',
+  marble:'<circle class="i-marble" r="14"/><circle class="i-shine" cx="-5" cy="-5" r="4"/>',
+  star:'<polygon class="i-star" points="'+STAR+'"/>',
+  kid:'<circle class="i-kid" cy="-9" r="6.5"/><path class="i-kid" d="M-10,15V5Q-10,-1,0,-1Q10,-1,10,5V15Z"/>'
+};
+var ITEM_NAME = {apple:'alma', cookie:'pogácsa', marble:'golyó', star:'matrica', kid:'gyerek'};
+
+/* distribution picture: a basket of items and k plates; split() deals them out one by one */
+function dist(total, k, kind){
+  var s=44, pad=16, per=total/k;
+  var pc0=Math.min(total,10), prow=Math.ceil(total/pc0);
+  /* small counts get a narrower picture, so items keep their size instead of shrinking */
+  var W=Math.min(640, Math.max(300, pc0*s+24+2*pad, k*(Math.min(per,5)*s+24)+pad*(k+1)));
+  var bw=pc0*s+24, bx=(W-bw)/2, bh=prow*s+20;
+  var plateW=(W-pad*(k+1))/k;
+  var pc=Math.max(1, Math.min(per, Math.floor((plateW-12)/s))), pr=Math.ceil(per/pc);
+  var py=bh+26, ph=pr*s+20, H=py+ph+44;
+  var home=[], dest=[];
+  var deco='<rect class="basket" x="'+bx+'" y="3" width="'+bw+'" height="'+(bh-6)+'" rx="18"/>';
+  for (var j=0;j<k;j++){
+    var x=pad+j*(plateW+pad);
+    deco += '<rect class="plate" x="'+x+'" y="'+py+'" width="'+plateW+'" height="'+ph+'" rx="20"/><text class="plate-count" x="'+(x+plateW/2)+'" y="'+(py+ph+34)+'" text-anchor="middle">'+per+'</text>';
+  }
+  for (var i=0;i<total;i++){
+    home.push([bx+12+s/2+(i%pc0)*s, 10+s/2+Math.floor(i/pc0)*s]);
+    var jj=i%k, t=Math.floor(i/k), x0=pad+jj*(plateW+pad)+(plateW-pc*s)/2;
+    dest.push([x0+s/2+(t%pc)*s, py+10+s/2+Math.floor(t/pc)*s]);
+  }
+  var items = home.map(function(p){ return '<g class="item" style="transform:translate('+p[0]+'px,'+p[1]+'px)">'+ITEM[kind]+'</g>'; }).join('');
+  return {
+    html: '<svg class="dist" viewBox="0 0 '+W+' '+H+'" style="max-width:'+W+'px" role="img" aria-label="'+total+' '+ITEM_NAME[kind]+' és '+k+' tányér">'+deco+items+'</svg>',
+    attach: function(holder){
+      var svg = holder.querySelector('svg.dist'), els = [].slice.call(svg.querySelectorAll('.item')), timer=null, isSplit=false;
+      var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      return {
+        split: function(cb){
+          if (isSplit){ if (cb) cb(); return; }
+          isSplit = true; svg.classList.add('split');
+          var step = reduce ? 0 : Math.min(120, 1500/els.length);
+          els.forEach(function(g,i){ g.style.transitionDelay=(i*step)+'ms'; g.style.transform='translate('+dest[i][0]+'px,'+dest[i][1]+'px)'; });
+          clearTimeout(timer);
+          timer = setTimeout(function(){ svg.classList.add('done'); if (cb) cb(); }, reduce ? 0 : els.length*step+560);
+        },
+        reset: function(){
+          isSplit = false; clearTimeout(timer); svg.classList.remove('split','done');
+          els.forEach(function(g,i){ g.style.transitionDelay='0ms'; g.style.transform='translate('+home[i][0]+'px,'+home[i][1]+'px)'; });
+        }
+      };
+    }
+  };
+}
+
+/* fraction wall */
+function wall(rows, interactive){
+  var W=600, h=56, g=10, out='';
+  var LABEL = {1:'1 egész', 2:'fél', 3:'harmad', 4:'negyed'};
+  rows.forEach(function(d,r){
+    var y=r*(h+g);
+    for (var i=0;i<d;i++){
+      var x=i*W/d;
+      out += '<g class="wall-piece"'+(interactive?' tabindex="0" role="button" aria-pressed="false" aria-label="'+LABEL[d]+'"':'')+' style="--c:'+COLOR[d]+'"><rect x="'+(x+2)+'" y="'+y+'" width="'+(W/d-4)+'" height="'+h+'" rx="10"/><text x="'+(x+W/(2*d))+'" y="'+(y+h/2+8)+'" text-anchor="middle">'+LABEL[d]+'</text></g>';
+    }
+  });
+  var H = rows.length*(h+g)-g;
+  return '<svg class="wall'+(interactive?' interactive':'')+'" viewBox="-2 -2 604 '+(H+4)+'" role="'+(interactive?'group':'img')+'" aria-label="Törtfal">'+out+'</svg>';
+}
+
+/* ================= icons, sound, speech ================= */
+var ICON_SPEAK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19.2 5.8a9 9 0 0 1 0 12.4"/></svg>';
+function iconNote(on){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor"/><circle cx="17" cy="16" r="3" fill="currentColor"/>'+(on?'':'<path d="M3 3l18 18" stroke-width="2.6"/>')+'</svg>';
+}
+function speakBtn(label){ return '<button class="iconbtn speak-btn" type="button" data-act="speak" aria-label="'+label+'" title="'+label+'">'+ICON_SPEAK+'</button>'; }
+
+var actx = null;
+function chime(ok){
+  if (!state.sound) return;
+  try{
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === 'suspended') actx.resume();
+    var t = actx.currentTime, notes = ok ? [523, 659, 784] : [330, 262];
+    notes.forEach(function(f,i){
+      var o = actx.createOscillator(), g = actx.createGain(), st = t + i*0.11;
+      o.type = ok ? 'sine' : 'triangle'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, st);
+      g.gain.exponentialRampToValueAtTime(ok?0.16:0.12, st+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, st+0.28);
+      o.connect(g); g.connect(actx.destination); o.start(st); o.stop(st+0.32);
+    });
+  }catch(e){}
+}
+
+var huVoice = null;
+function pickVoice(){
+  try{
+    if (!('speechSynthesis' in window)) return;
+    var vs = speechSynthesis.getVoices() || [];
+    huVoice = vs.filter(function(v){ return /^hu/i.test(v.lang); })[0] || null;
+    document.body.classList.toggle('can-speak', !!huVoice);
+  }catch(e){}
+}
+pickVoice();
+try{ if ('speechSynthesis' in window && speechSynthesis.addEventListener) speechSynthesis.addEventListener('voiceschanged', pickVoice); }catch(e){}
+function speak(text){
+  if (!huVoice) return;
+  try{
+    speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text.replace(/×/g,' szor ').replace(/\s+/g,' ').trim());
+    u.voice = huVoice; u.lang = huVoice.lang || 'hu-HU'; u.rate = 0.9;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function visibleText(root, sel){
+  return [].slice.call(root.querySelectorAll(sel)).filter(function(el){ return el.offsetParent !== null; }).map(function(el){ return el.textContent; }).join('. ');
+}
+
+/* ================= top bar ================= */
+document.getElementById('brand').innerHTML =
+  '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="'+sector(20,20,17,0,1)+'" style="fill:var(--piece);stroke:var(--line);stroke-width:2.5"/><path d="'+sector(20,20,17,0.5,1)+'" style="fill:var(--half);stroke:var(--line);stroke-width:2.5;stroke-linejoin:round"/><path d="'+sector(20,20,17,0,0.25)+'" style="fill:var(--quarter);stroke:var(--line);stroke-width:2.5;stroke-linejoin:round"/></svg><span>Fél, harmad, negyed</span>';
+document.getElementById('starIcon').innerHTML = starSVG();
+var starCount = document.getElementById('starCount'), starPill = document.getElementById('starPill'), soundBtn = document.getElementById('soundBtn');
+function paintStars(bump){
+  starCount.textContent = state.stars;
+  if (bump){ starPill.classList.remove('bump'); void starPill.offsetWidth; starPill.classList.add('bump'); }
+}
+function paintSound(){
+  soundBtn.innerHTML = iconNote(state.sound);
+  soundBtn.setAttribute('aria-pressed', state.sound);
+  soundBtn.setAttribute('aria-label', state.sound ? 'Hangok kikapcsolása' : 'Hangok bekapcsolása');
+  soundBtn.title = state.sound ? 'Hangok: be' : 'Hangok: ki';
+}
+soundBtn.addEventListener('click', function(){ state.sound = !state.sound; save('sound', state.sound); paintSound(); if (state.sound) chime(true); });
+paintStars(); paintSound();
+function addStar(){ state.stars++; save('stars', state.stars); paintStars(true); }
+
+/* keyboard support for SVG pieces acting as buttons */
+document.addEventListener('keydown', function(e){
+  var t = e.target;
+  if ((e.key === 'Enter' || e.key === ' ') && t instanceof SVGElement && t.getAttribute('role') === 'button'){
+    e.preventDefault();
+    t.dispatchEvent(new MouseEvent('click', {bubbles:true}));
+  }
+});
+
+/* ================= HOME ================= */
+function renderHome(){
+  var resume = state.lesson > 0 ? '<p class="resume">Itt tartasz: '+(state.lesson+1)+'. lecke</p>' : '';
+  var examples = {
+    2:'a 8 fele 4, <span class="nowrap">mert 2 × 4 = 8</span>',
+    3:'a 12 harmada 4, <span class="nowrap">mert 3 × 4 = 12</span>',
+    4:'a 20 negyede 5, <span class="nowrap">mert 4 × 5 = 20</span>'
+  };
+  app.innerHTML =
+  '<section class="hero">'+
+    '<div><h1><span class="mk mk-half">Fél</span>, <span class="mk mk-third">harmad</span>, <span class="mk mk-quarter">negyed</span></h1>'+
+    '<p class="lead">Hogyan osztozzunk igazságosan egy tortán, egy csokin vagy egy kosár almán? Nézd meg a leckéket, aztán gyakorolj!</p></div>'+
+    '<div class="hero-pies">'+[2,3,4].map(function(d){
+      return '<figure class="hero-pie">'+pie({sizes:eqSizes(d), on:[0], color:COLOR[d], label:FR[d].name})+'<figcaption>'+FR[d].name+' '+frac(d)+'</figcaption></figure>';
+    }).join('')+'</div>'+
+  '</section>'+
+  '<div class="choices">'+
+    '<a class="bigcard" href="#tanulas"><span class="bigcard-ill">'+pie({sizes:eqSizes(4), on:[0], color:COLOR[4], label:'negyedekre vágott torta'})+bar({sizes:eqSizes(3), on:[1], color:COLOR[3], label:'harmadokra tört csoki'})+'</span>'+
+      '<h2>Tanulás</h2><p>8 rövid lecke képekkel: mit jelent a fél, a harmad és a negyed?</p>'+resume+
+      '<span class="btn primary">'+(state.lesson>0?'Folytatom':'Kezdjük!')+'</span></a>'+
+    '<a class="bigcard" href="#gyakorlas"><span class="bigcard-ill">'+grid({rows:2, cols:3, on:[0,1,2], label:'félig kiszínezett csoki'})+starSVG('ill-star')+'</span>'+
+      '<h2>Gyakorlás</h2><p>Tíz feladatos körök. Minden elsőre jó válasz egy csillagot ér.</p>'+
+      '<span class="btn">Gyakorlok</span></a>'+
+  '</div>'+
+  '<section class="card puska"><h2>Kis puska</h2><div class="puska-grid">'+[2,3,4].map(function(d){
+    return '<div class="puska-item">'+pie({sizes:eqSizes(d), on:[0], color:COLOR[d], label:FR[d].name})+
+      '<h3>'+cap(FR[d].name)+' '+frac(d)+'</h3><p>'+cap(NUM[d])+' egyforma részből egy.</p><p class="hand">'+examples[d]+'</p></div>';
+  }).join('')+'</div></section>'+
+  '<section class="parents"><h2>Szülőknek</h2>'+
+    '<p>Az alkalmazás csak a 2-es, 3-as és 4-es szorzótáblára épít. A „mennyi a 12 harmada?” típusú feladatoknál a gyerek tányérokra osztja a tárgyakat, és a szorzótáblából keresi a választ: 3 × ? = 12.</p>'+
+    '<p>A Gyakorlásnál beállíthatod, melyik részekkel és milyen nehézségen dolgozzon. Érdemes csak a féllel kezdeni, aztán jöhet a harmad és a negyed. A csillagok csak ezen az eszközön, ebben a böngészőben tárolódnak.</p>'+
+  '</section>';
+  app.onclick = null;
+}
+
+/* ================= LESSONS ================= */
+function bindSeg(seg, onPick){
+  seg.addEventListener('click', function(e){
+    var b = e.target.closest('button'); if (!b) return;
+    [].forEach.call(seg.querySelectorAll('button'), function(x){ x.setAttribute('aria-checked', x === b); });
+    onPick(+b.dataset.d);
+  });
+}
+function lessonCut(d){
+  var intro = {
+    2:'Van egy tortánk. Ketten osztoztok rajta: te és a barátod. Mindkettőtöknek ugyanannyi jár.',
+    3:'Most hárman vagytok: te és két barátod. A tortát három egyforma darabra kell vágni.',
+    4:'Jött még egy barát, már négyen vagytok. Most négy egyforma darab kell.'
+  }[d];
+  var btn = {2:'Vágjuk ketté!', 3:'Vágjuk háromfelé!', 4:'Vágjuk négyfelé!'}[d];
+  var after = {
+    2:'Két egyforma darab lett. <b>Egy darab a torta fele.</b> Két fél együtt kiadja az egész tortát.',
+    3:'Három egyforma darab lett. <b>Egy darab a torta harmada.</b> Három harmad együtt kiadja az egész tortát.',
+    4:'Négy egyforma darab lett. <b>Egy darab a torta negyede.</b> Négy negyed együtt kiadja az egész tortát.'
+  }[d];
+  var names = d === 4 ? '<div class="tip"><p class="hand">Figyeld meg!</p><p>A név elárulja, hány egyforma részre vágtunk: <b>2 rész: fél</b>, <b>3 rész: harmad</b>, <b>4 rész: negyed</b>.</p></div>' : '';
+  return {
+    title: 'Mi az a '+FR[d].name+'?',
+    html:
+      '<p class="say">'+intro+'</p>'+
+      '<div class="stage"><div class="pie-holder">'+pie({sizes:[1], color:COLOR[d], label:'egész torta'})+'</div>'+
+      '<div class="stage-side"><button class="btn primary big" type="button" data-cut>'+btn+'</button><p class="count-label" aria-live="polite"></p><p class="stage-hint" hidden>Koppints a darabokra, és figyeld, mit írok ide!</p></div></div>'+
+      '<div class="reveal" hidden><p class="say">'+after+'</p>'+
+      '<div class="note">'+frac(d)+'<p>Így is írhatjuk. Úgy olvassuk: <b>'+FR[d].read+'</b>. Az alsó szám megmondja, hány egyforma részre vágtuk az egészet.</p></div>'+names+'</div>',
+    bind: function(el){
+      var holder = el.querySelector('.pie-holder'), label = el.querySelector('.count-label'), cut = el.querySelector('[data-cut]');
+      function upd(){
+        var c = holder.querySelectorAll('.piece.on').length;
+        label.textContent = c === 0 ? 'Egy darab sincs kiszínezve.' : c === d ? d+' '+FR[d].name+' = az egész torta!' : c+' '+FR[d].name;
+      }
+      cut.addEventListener('click', function(){
+        holder.innerHTML = pie({sizes:eqSizes(d), on:[0], color:COLOR[d], interactive:true, label:NUM[d]+' egyforma darabra vágott torta'});
+        requestAnimationFrame(function(){ requestAnimationFrame(function(){ var p = holder.querySelector('.piece.on'); if (p) p.classList.add('out'); }); });
+        cut.hidden = true; el.querySelector('.reveal').hidden = false; el.querySelector('.stage-hint').hidden = false;
+        upd(); chime(true);
+      });
+      holder.addEventListener('click', function(e){
+        var p = e.target.closest('.piece'); if (!p || !holder.querySelector('.interactive')) return;
+        var on = !p.classList.contains('on');
+        p.classList.toggle('on', on); p.classList.toggle('out', on); p.setAttribute('aria-pressed', on);
+        upd();
+      });
+    }
+  };
+}
+var LESSONS = [
+  function(){ return lessonCut(2); },
+  function(){ return lessonCut(3); },
+  function(){ return lessonCut(4); },
+  function(){ return {
+    title:'Csak az egyforma darab számít!',
+    html:
+      '<p class="say">Bence kettétörte a csokiját, és a kisebbik darabot odaadta Annának. Azt mondta: „Tessék, ez a fele!”</p>'+
+      '<figure class="figure">'+bar({sizes:[.36,.64], on:[0], color:COLOR[2], label:'Kettétört csoki, az egyik darab kisebb'})+'<figcaption class="caption">Anna darabja a színes.</figcaption></figure>'+
+      '<p class="ask">Igaza van Bencének?</p>'+
+      '<div class="options two"><button class="opt" type="button" data-v="yes">Igen</button><button class="opt" type="button" data-v="no">Nem</button></div>'+
+      '<div class="reveal" hidden><p class="fb-line"></p>'+
+      '<p class="say">Fél csak akkor van, ha a két darab <b>pontosan ugyanakkora</b>. Így lett volna igazságos:</p>'+
+      '<figure class="figure">'+bar({sizes:[.5,.5], on:[0], color:COLOR[2], label:'Igazságosan kettétört csoki'})+'<figcaption class="caption">Ez már tényleg a csoki fele.</figcaption></figure>'+
+      '<p class="say">Ugyanez igaz a harmadra és a negyedre is: csak egyforma darabokról mondhatjuk, hogy harmad vagy negyed.</p></div>',
+    bind: function(el){
+      var opts = el.querySelector('.options');
+      opts.addEventListener('click', function(e){
+        var b = e.target.closest('.opt'); if (!b || b.disabled) return;
+        var ok = b.dataset.v === 'no';
+        [].forEach.call(opts.querySelectorAll('.opt'), function(x){ x.disabled = true; if (x.dataset.v === 'no') x.classList.add('correct'); else if (x === b) x.classList.add('wrong'); });
+        var line = el.querySelector('.fb-line');
+        line.className = 'fb-line ' + (ok ? 'ok' : 'no');
+        line.textContent = ok ? 'Így van, nincs igaza! A két darab nem egyforma, Anna a kisebbiket kapta.' : 'Nézd meg jobban! A két darab nem egyforma, Anna a kisebbiket kapta. Ez nem a csoki fele.';
+        el.querySelector('.reveal').hidden = false;
+        chime(ok);
+      });
+    }
+  }; },
+  function(){ return {
+    title:'Melyik darab a nagyobb?',
+    html:
+      '<p class="say">Ugyanakkora tortákat vágunk fel. Minél többen osztozunk, annál több darab lesz, és annál kisebb jut egy embernek.</p>'+
+      '<div class="seg-wrap"><p class="seg-title" id="l5t">Hányan osztozunk?</p><div class="seg" role="radiogroup" aria-labelledby="l5t">'+
+        [2,3,4].map(function(d){ return '<button type="button" role="radio" aria-checked="'+(d===2)+'" data-d="'+d+'">'+d+'</button>'; }).join('')+'</div></div>'+
+      '<div class="stage"><div class="pie-holder" id="l5pie"></div><p class="stage-cap" id="l5cap" aria-live="polite"></p></div>'+
+      '<div class="compare-row">'+
+        '<figure>'+pie({sizes:eqSizes(2), on:[0], color:COLOR[2], label:'fél'})+'<figcaption>fél</figcaption></figure><span class="gt" aria-label="nagyobb, mint">&gt;</span>'+
+        '<figure>'+pie({sizes:eqSizes(3), on:[0], color:COLOR[3], label:'harmad'})+'<figcaption>harmad</figcaption></figure><span class="gt" aria-label="nagyobb, mint">&gt;</span>'+
+        '<figure>'+pie({sizes:eqSizes(4), on:[0], color:COLOR[4], label:'negyed'})+'<figcaption>negyed</figcaption></figure>'+
+      '</div>'+
+      '<p class="say">A fél nagyobb, mint a harmad. A harmad nagyobb, mint a negyed.</p>'+
+      '<div class="tip"><p class="hand">Jó tanács</p><p>Ha nagyon éhes vagy, a torta felét kérd, ne a negyedét!</p></div>',
+    bind: function(el){
+      var holder = el.querySelector('#l5pie'), capEl = el.querySelector('#l5cap');
+      function show(d){
+        holder.innerHTML = pie({sizes:eqSizes(d), on:[0], color:COLOR[d], label:NUM[d]+' darabra vágott torta'});
+        capEl.innerHTML = cap(NUM[d])+' darab lett.<br>Egy ember a torta '+FR[d].acc+' kapja.';
+        requestAnimationFrame(function(){ requestAnimationFrame(function(){ var p = holder.querySelector('.piece.on'); if (p) p.classList.add('out'); }); });
+      }
+      bindSeg(el.querySelector('.seg'), show);
+      show(2);
+    }
+  }; },
+  function(){
+    var D = dist(8, 2, 'apple');
+    return {
+      title:'Mennyi a 8 alma fele?',
+      html:
+        '<p class="say">Nem csak tortát lehet elosztani! Van 8 almánk. Tegyük őket két tányérra, egyformán.</p>'+
+        '<div class="dist-holder">'+D.html+'</div>'+
+        '<div class="row"><button class="btn primary big" type="button" data-split>Osszuk szét!</button><button class="btn" type="button" data-again hidden>Még egyszer</button></div>'+
+        '<div class="reveal" hidden><p class="say">Mindkét tányéron 4 alma van. <b>A 8 fele 4.</b></p>'+
+        '<div class="tip"><p class="hand">A szorzótábla segít!</p><p>Két tányér, mindegyiken 4 alma: <b>2 × 4 = 8</b>. Ezért a 8 fele 4.</p></div></div>',
+      bind: function(el){
+        var c = D.attach(el.querySelector('.dist-holder')), sp = el.querySelector('[data-split]'), ag = el.querySelector('[data-again]');
+        sp.addEventListener('click', function(){ sp.disabled = true; c.split(function(){ el.querySelector('.reveal').hidden = false; sp.hidden = true; ag.hidden = false; chime(true); }); });
+        ag.addEventListener('click', function(){ c.reset(); setTimeout(function(){ c.split(); }, 650); });
+      }
+    };
+  },
+  function(){ return {
+    title:'Harmada és negyede',
+    html:
+      '<p class="say">Nagymama 12 pogácsát sütött. Hány tányérra osszuk szét? Válassz!</p>'+
+      '<div class="seg" role="radiogroup" aria-label="Hány tányérra osszuk szét?">'+
+        [2,3,4].map(function(d){ return '<button type="button" role="radio" aria-checked="'+(d===2)+'" data-d="'+d+'">'+cap(FR[d].poss)+'<small>'+d+' tányér</small></button>'; }).join('')+'</div>'+
+      '<div class="dist-holder" id="l7d"></div>'+
+      '<p class="result-line" id="l7r" aria-live="polite"></p>'+
+      '<div class="tip"><p class="hand">Trükk</p><p>Keresd meg a szorzótáblában! Ha a 12 harmadát keresed, ezt kérdezd: <b>3 × ? = 12</b>. A válasz 4, ezért a 12 harmada 4.</p></div>',
+    bind: function(el){
+      var holder = el.querySelector('#l7d'), res = el.querySelector('#l7r'), timer = null;
+      function show(d){
+        clearTimeout(timer);
+        var D = dist(12, d, 'cookie'); holder.innerHTML = D.html; var c = D.attach(holder);
+        res.innerHTML = '';
+        timer = setTimeout(function(){ c.split(function(){ res.innerHTML = 'Egy tányérra '+(12/d)+' pogácsa jutott. <b>A 12 '+FR[d].poss+' '+(12/d)+'</b>, mert '+d+' × '+(12/d)+' = 12.'; }); }, 450);
+      }
+      bindSeg(el.querySelector('.seg'), show);
+      show(2);
+    }
+  }; },
+  function(){ return {
+    title:'Rakjuk össze!',
+    html:
+      '<p class="say">Ez a törtfal. Minden sor ugyanolyan hosszú, mint az egész. Koppints a darabokra, és színezd ki őket!</p>'+
+      '<div class="wall-holder">'+wall([1,2,3,4], true)+'</div>'+
+      '<ul class="facts"><li>2 fél = 1 egész</li><li>3 harmad = 1 egész</li><li>4 negyed = 1 egész</li><li>2 negyed = 1 fél<small>Nézd meg a falon!</small></li></ul>'+
+      '<div class="tip"><p class="hand">Kis puska</p><p><b>Fél:</b> 2 egyforma részre osztunk. <b>Harmad:</b> 3 részre. <b>Negyed:</b> 4 részre. Ha egy szám felét, harmadát vagy negyedét keresed, kérdezd meg a szorzótáblát: 2 × ? , 3 × ? vagy 4 × ?</p></div>',
+    bind: function(el){
+      el.querySelector('.wall').addEventListener('click', function(e){
+        var p = e.target.closest('.wall-piece'); if (!p) return;
+        var on = !p.classList.contains('on'); p.classList.toggle('on', on); p.setAttribute('aria-pressed', on);
+      });
+    }
+  }; }
+];
+if (typeof state.lesson !== 'number' || state.lesson < 0 || state.lesson >= LESSONS.length) state.lesson = 0;
+
+function setLesson(j){
+  state.lesson = Math.max(0, Math.min(LESSONS.length-1, j)); save('lesson', state.lesson);
+  renderLessons();
+  app.scrollIntoView({block:'start'});
+}
+function renderLessons(){
+  var i = state.lesson, L = LESSONS[i]();
+  app.innerHTML =
+    '<section class="lessons">'+
+    '<nav class="lesson-nav" aria-label="Leckék">'+LESSONS.map(function(_,j){ return '<button type="button" data-go="'+j+'"'+(j===i?' aria-current="step"':'')+' aria-label="'+(j+1)+'. lecke">'+(j+1)+'</button>'; }).join('')+'</nav>'+
+    '<article class="card lesson"><div class="lesson-head"><div><p class="lesson-no">'+(i+1)+'. lecke a 8-ból</p><h2>'+L.title+'</h2></div>'+speakBtn('Felolvasom')+'</div>'+L.html+'</article>'+
+    '<div class="pager"><button class="btn" type="button" data-act="prev"'+(i===0?' disabled':'')+'>‹ Vissza</button>'+
+    (i < LESSONS.length-1 ? '<button class="btn primary" type="button" data-act="next">Tovább ›</button>' : '<a class="btn primary" href="#gyakorlas">Jöhetnek a feladatok ›</a>')+'</div>'+
+    '</section>';
+  var art = app.querySelector('.lesson');
+  if (L.bind) L.bind(art);
+  app.onclick = function(e){
+    var go = e.target.closest('[data-go]'); if (go){ setLesson(+go.dataset.go); return; }
+    var a = e.target.closest('[data-act]'); if (!a) return;
+    if (a.dataset.act === 'prev') setLesson(i-1);
+    else if (a.dataset.act === 'next') setLesson(i+1);
+    else if (a.dataset.act === 'speak') speak(visibleText(art, 'h2, .say, .ask, .fb-line, .stage-cap, .result-line'));
+  };
+}
+
+/* ================= PRACTICE: question generators ================= */
+function dens(){ return state.settings.dens.slice().sort(); }
+function isHard(){ return !!state.settings.hard; }
+function fracOpt(d){ return {v:d, text:FR[d].name, html:frac(d)+'<span>'+FR[d].name+'</span>'}; }
+function numOpt(v){ return {v:v, text:String(v), html:String(v)}; }
+function numOptions(ans, q, d){
+  var cand = shuffle([ans+1, ans-1, ans+2, ans-2, q, q-ans, ans*2, ans+d].concat([2,3,4].filter(function(x){ return x!==d && q%x===0; }).map(function(x){ return q/x; })));
+  var out = [];
+  cand.forEach(function(c){ if (c > 0 && c !== ans && out.indexOf(c) < 0 && out.length < 3) out.push(c); });
+  var extra = ans + 3; while (out.length < 3){ if (out.indexOf(extra) < 0) out.push(extra); extra++; }
+  return out.concat([ans]).sort(function(a,b){ return a-b; });
+}
+
+function genRecognize(){
+  var d = pick(dens()), n = d, m = 1, kind;
+  if (isHard() && Math.random() < 0.45){ m = pick([2,3].filter(function(x){ return d*x <= 12; })); n = d*m; }
+  if (n === d) kind = pick(d === 4 ? ['pie','bar','grid'] : ['pie','bar']);
+  else kind = pick(n <= 6 ? ['pie','bar','grid'] : ['pie','grid']);
+  var on = m === 1 ? [rnd(0, n-1)] : shuffle(range(n)).slice(0, m);
+  return {
+    prompt:'Mekkora részét színeztük ki?',
+    visual: shape(kind, n, {on:on, label:n+' részre osztott alakzat, '+m+' rész színes'}),
+    kind:'mc', options:[2,3,4].map(fracOpt), answer:d,
+    hint: m === 1 ? 'Számold meg: hány egyforma darabból áll az egész?' : 'Összesen '+n+' darab van, ebből '+m+' színes. Melyik igaz: 2 × '+m+' = '+n+', 3 × '+m+' = '+n+' vagy 4 × '+m+' = '+n+'?',
+    explain: m === 1 ? 'Az egész '+NUM[d]+' egyforma részből áll, és 1 rész színes. Ez egy '+FR[d].name+'.' : n+' egyforma rész van, ebből '+m+' színes. '+cap(az(n))+' '+n+' '+FR[d].poss+' '+m+', mert '+d+' × '+m+' = '+n+'. Tehát a színes rész az egész '+FR[d].poss+'.'
+  };
+}
+function genEqual(){
+  var d = pick(dens()), kind = pick(['pie','bar']), thing = kind === 'pie' ? pick(['torta','pizza']) : 'csoki';
+  var verb = thing === 'csoki' ? 'törve' : 'vágva';
+  var r = Math.random(), sizes, ans, explain;
+  if (r < 0.45){ sizes = eqSizes(d); ans = 'yes'; explain = 'Igen! A '+thing+' '+NUM[d]+' egyforma darabra van '+verb+', ezért egy darab éppen a '+thing+' '+FR[d].poss+'.'; }
+  else if (r < 0.8){ sizes = shuffle(pick(UNEQ[d])); ans = 'no'; explain = 'Nem! A '+thing+' '+NUM[d]+' darabra van '+verb+', de a darabok nem egyformák. Ezért a színes rész nem a '+thing+' '+FR[d].poss+'.'; }
+  else { var o = pick([2,3,4].filter(function(x){ return x !== d; })); sizes = eqSizes(o); ans = 'no'; explain = 'Nem! A '+thing+' '+NUM[o]+' egyforma darabra van '+verb+', ezért a színes rész a '+thing+' '+FR[o].poss+', nem a '+FR[d].poss+'.'; }
+  var on = [rnd(0, sizes.length-1)];
+  return {
+    prompt:'A színes rész a '+thing+' '+FR[d].poss+'?',
+    visual: kind === 'pie' ? pie({sizes:sizes, on:on, label:thing}) : bar({sizes:sizes, on:on, label:thing}),
+    kind:'mc', binary:true,
+    options:[{v:'yes', text:'Igen', html:'Igen'}, {v:'no', text:'Nem', html:'Nem'}], answer:ans,
+    hint:'Nézd meg jól: hány darab van, és mindegyik ugyanakkora?',
+    explain:explain
+  };
+}
+function genColor(){
+  var d = pick(dens());
+  var ms = isHard() ? [1,2,3].filter(function(x){ return d*x <= 12; }) : [1,1,2].filter(function(x){ return d*x <= 8; });
+  var m = pick(ms), n = d*m;
+  var kinds = n <= 4 ? ['pie','bar'] : (n <= 6 ? ['pie','bar','grid'] : ['pie','grid']);
+  if (n === 4) kinds.push('grid');
+  var kind = pick(kinds), thing = kind === 'pie' ? pick(['torta','pizza']) : 'csoki';
+  return {
+    prompt:'Színezd ki a '+thing+' '+FR[d].acc+'!',
+    sub:'Koppints a darabokra, aztán nyomd meg a Kész gombot.',
+    visual: shape(kind, n, {on:[], interactive:true, label:n+' darabos '+thing}),
+    kind:'color', m:m, n:n,
+    hint: m === 1 ? 'A '+thing+' '+NUM[d]+' egyforma darabból áll. Ebből 1 darab éppen a '+FR[d].poss+'.' : n+' darab van. Keresd meg a szorzótáblában: '+d+' × ? = '+n+'.',
+    explain: m === 1 ? 'Az egész '+NUM[d]+' darab, ebből 1 darab a '+FR[d].poss+'.' : cap(az(n))+' '+n+' darab '+FR[d].poss+' '+m+' darab, mert '+d+' × '+m+' = '+n+'.'
+  };
+}
+var WORD = [
+  {kind:'cookie', t:function(q,d){ return 'Nagymama '+q+' pogácsát sütött. A '+FR[d].acc+' neked adja. Hány pogácsát kapsz?'; }},
+  {kind:'apple',  t:function(q,d){ return 'A kosárban '+q+' alma van. A '+FR[d].acc+' megettük. Hány almát ettünk meg?'; }},
+  {kind:'star',   t:function(q,d){ return 'Panni '+q+' matricát gyűjtött. A '+FR[d].acc+' odaadta Bencének. Hány matricát adott oda?'; }},
+  {kind:'marble', t:function(q,d){ return q+' golyót egyformán szétosztunk '+NUM[d]+' gyerek között. Hány golyót kap egy gyerek?'; }},
+  {kind:'kid', max:32, t:function(q,d){ return 'Az osztályba '+q+' gyerek jár. A '+FR[d].poss+' fiú. Hány fiú jár az osztályba?'; }}
+];
+function genQuantity(word){
+  var d = pick(dens()), k = isHard() ? rnd(2,10) : rnd(2,5), q = d*k, text, kind, sub = '';
+  if (word){
+    var t = pick(WORD.filter(function(w){ return !w.max || q <= w.max; }));
+    text = t.t(q,d); kind = t.kind;
+  } else {
+    kind = pick(['apple','cookie','marble','star']);
+    text = 'Mennyi '+az(q)+' '+q+' '+FR[d].poss+'?';
+    sub = 'Itt van '+q+' '+ITEM_NAME[kind]+'. Oszd szét őket '+NUM[d]+' tányérra egyformán!';
+  }
+  var D = dist(q, d, kind);
+  return {
+    prompt:text, sub:sub,
+    visual:'<div class="dist-holder">'+D.html+'</div>',
+    kind:'mc', optClass:'nums', options:numOptions(k,q,d).map(numOpt), answer:k,
+    hint:'Oszd szét '+NUM[d]+' egyforma részre! A szorzótábla is segít: '+d+' × ? = '+q,
+    explain:cap(az(q))+' '+q+' '+FR[d].poss+' '+k+', mert '+d+' × '+k+' = '+q+'.',
+    mount:function(card){ this.ctrl = D.attach(card.querySelector('.dist-holder')); },
+    onHint:function(){ this.ctrl.split(); },
+    onDone:function(){ this.ctrl.split(); }
+  };
+}
+function cmpPool(){ var p = dens(); return p.length >= 2 ? p : [2,3,4]; }
+function genCmpShape(){
+  var ab = shuffle(cmpPool()).slice(0,2), lo = Math.min(ab[0],ab[1]), hi = Math.max(ab[0],ab[1]);
+  var bigger = Math.random() < 0.6, ans = bigger ? lo : hi, thing = pick(['torta','pizza']), word = bigger ? 'nagyobb' : 'kisebb';
+  return {
+    prompt:'Melyik darab a '+word+'?',
+    visual:'', kind:'mc', optClass:'shapes', answer:ans,
+    options: ab.map(function(x){ return {v:x, text:'a '+thing+' '+FR[x].poss, html:'<span class="opt-shape">'+pie({sizes:eqSizes(x), on:[0], label:FR[x].name})+'</span><span>a '+thing+' '+FR[x].poss+'</span>'}; }),
+    hint:'Melyiket vágták kevesebb darabra? Annak nagyobbak a darabjai.',
+    explain: cap(FR[lo].name)+': '+NUM[lo]+' darabra vágtuk. '+cap(FR[hi].name)+': '+NUM[hi]+' darabra vágtuk. Minél több darabra vágjuk, annál kisebb egy darab. Tehát a '+FR[ans].name+' a '+word+'.'
+  };
+}
+function genCmpNum(){
+  var ab = shuffle(cmpPool()).slice(0,2), lo = Math.min(ab[0],ab[1]), hi = Math.max(ab[0],ab[1]);
+  var l = lo*hi/gcd(lo,hi), maxQ = lo*(isHard() ? 10 : 5), qs = [];
+  for (var x = l; x <= maxQ; x += l) qs.push(x);
+  var q = pick(qs);
+  function lab(d){ return az(q)+' '+q+' '+FR[d].poss; }
+  return {
+    prompt:'Melyik a több: '+lab(ab[0])+' vagy '+lab(ab[1])+'?',
+    visual:'', kind:'mc', answer:lo,
+    options: ab.map(function(d){ return {v:d, text:lab(d), html:cap(lab(d))}; }),
+    hint:'Számold ki mindkettőt! Segít a szorzótábla: '+lo+' × ? = '+q+' és '+hi+' × ? = '+q+'.',
+    explain: cap(lab(lo))+' '+(q/lo)+', '+lab(hi)+' '+(q/hi)+'. '+cap(az(q/lo))+' '+(q/lo)+' több, mint '+az(q/hi)+' '+(q/hi)+'.'
+  };
+}
+function genWhole(){
+  var ds = dens(), both = ds.indexOf(2) >= 0 && ds.indexOf(4) >= 0;
+  var v = both && Math.random() < 0.4 ? pick(['qInHalf','twoQ']) : 'count';
+  if (v === 'count'){
+    var d = pick(ds);
+    return {
+      prompt:'Hány '+FR[d].name+' van egy egészben?',
+      visual: pie({sizes:[1], label:'egész torta'}),
+      kind:'mc', optClass:'nums', options:[1,2,3,4].map(numOpt), answer:d,
+      hint:'Képzeld el, hogy a tortát '+FR[d].cut+' vágod! Hány darab lesz?',
+      explain: cap(NUM[d])+' '+FR[d].name+' van egy egészben: '+Array(d).fill(FR[d].name).join(' + ')+' = 1 egész.',
+      mount:function(card){ this.vis = card.querySelector('.visual'); },
+      onHint:function(){ this.vis.innerHTML = pie({sizes:eqSizes(d), label:NUM[d]+' darabra vágott torta'}); },
+      onDone:function(){ this.vis.innerHTML = pie({sizes:eqSizes(d), on:range(d), color:COLOR[d], label:NUM[d]+' darabra vágott torta'}); }
+    };
+  }
+  if (v === 'qInHalf') return {
+    prompt:'Hány negyed van egy félben?',
+    visual: wall([2,4], false),
+    kind:'mc', optClass:'nums', options:[1,2,3,4].map(numOpt), answer:2,
+    hint:'Nézd meg a képet: hány negyed fér el pontosan egy fél alatt?',
+    explain:'Két negyed van egy félben. 2 negyed pont olyan hosszú, mint 1 fél.'
+  };
+  return {
+    prompt:'Két negyed ugyanannyi, mint egy…',
+    visual: wall([1,2,4], false),
+    kind:'mc', options:[{v:2, text:'fél', html:'fél'}, {v:3, text:'harmad', html:'harmad'}, {v:1, text:'egész', html:'egész'}], answer:2,
+    hint:'Keresd meg a falon: mi olyan hosszú, mint két negyed egymás mellett?',
+    explain:'Két negyed együtt pont egy fél: negyed + negyed = fél.'
+  };
+}
+var GENS = {
+  recognize:{w:3, f:genRecognize, g:'forms'},
+  equal:{w:2, f:genEqual, g:'forms'},
+  color:{w:3, f:genColor, g:'forms'},
+  cmpShape:{w:1, f:genCmpShape, g:'forms'},
+  whole:{w:1, f:genWhole, g:'forms'},
+  qPlain:{w:3, f:function(){ return genQuantity(false); }, g:'numbers'},
+  qWord:{w:3, f:function(){ return genQuantity(true); }, g:'numbers'},
+  cmpNum:{w:1, f:genCmpNum, g:'numbers'}
+};
+var PRAISE = ['Ügyes!', 'Szuper!', 'Pontosan!', 'Így van!', 'Telitalálat!', 'Nagyszerű!', 'Ez az!'];
+
+/* ================= PRACTICE: flow ================= */
+var round = null;
+function makeQuestion(){
+  var mode = state.settings.mode;
+  var keys = Object.keys(GENS).filter(function(k){ return (mode === 'mix' || GENS[k].g === mode) && k !== round.last; });
+  var tot = keys.reduce(function(s,k){ return s + GENS[k].w; }, 0), r = Math.random()*tot, key = keys[0];
+  for (var i=0;i<keys.length;i++){ r -= GENS[keys[i]].w; if (r < 0){ key = keys[i]; break; } }
+  round.last = key;
+  var q = GENS[key].f(); q.type = key; q.tries = 0; q.done = false;
+  return q;
+}
+function startRound(){ round = {i:0, n:10, score:0, last:null, q:null}; nextQuestion(); }
+function nextQuestion(){
+  if (round.i >= round.n){ renderResult(); return; }
+  round.q = makeQuestion();
+  renderQuestion();
+  app.scrollIntoView({block:'start'});
+}
+
+function renderSetup(){
+  var s = state.settings;
+  function choice(type, name, v, checked, inner){ return '<label class="choice"><input type="'+type+'" name="'+name+'" id="'+name+'-'+v+'" value="'+v+'"'+(checked?' checked':'')+'><span>'+inner+'</span></label>'; }
+  app.innerHTML =
+    '<section><h1 class="page-title">Gyakorlás</h1>'+
+    '<form class="card setup" id="setupForm" novalidate>'+
+      '<fieldset><legend>Mit gyakorolunk?</legend><div class="choices-row">'+
+        choice('radio','mode','forms', s.mode==='forms', '<b>Formák</b><small>Tortát, csokit színezünk, és felismerjük a részeket.</small>')+
+        choice('radio','mode','numbers', s.mode==='numbers', '<b>Számolás</b><small>Mennyi a 12 fele? Szöveges feladatok.</small>')+
+        choice('radio','mode','mix', s.mode==='mix', '<b>Vegyes</b><small>Egy kicsit mindegyikből.</small>')+
+      '</div></fieldset>'+
+      '<fieldset><legend>Melyik részekkel?</legend><div class="choices-row dens">'+
+        [2,3,4].map(function(d){ return '<label class="choice"><input type="checkbox" name="dens" id="dens-'+d+'" value="'+d+'"'+(s.dens.indexOf(d)>=0?' checked':'')+'><span class="den"><i class="dot" style="background:'+COLOR[d]+'"></i><b>'+FR[d].name+'</b></span></label>'; }).join('')+
+      '</div><p class="warn" id="densWarn" hidden>Legalább egyet válassz ki!</p></fieldset>'+
+      '<fieldset><legend>Milyen nehéz legyen?</legend><div class="choices-row">'+
+        choice('radio','lvl','easy', !s.hard, '<b>Könnyebb</b><small>Kisebb számok: a szorzótábla 5-ig.</small>')+
+        choice('radio','lvl','hard', s.hard, '<b>Nehezebb</b><small>A teljes 2-es, 3-as és 4-es szorzótábla.</small>')+
+      '</div></fieldset>'+
+      '<div><button class="btn primary big" type="submit">Indulhat a kör!</button></div>'+
+    '</form></section>';
+  var f = app.querySelector('#setupForm'), warn = app.querySelector('#densWarn');
+  f.addEventListener('change', function(e){
+    var checked = [].slice.call(f.querySelectorAll('input[name=dens]:checked')).map(function(x){ return +x.value; });
+    if (!checked.length && e.target.name === 'dens'){ e.target.checked = true; warn.hidden = false; return; }
+    warn.hidden = true;
+    s.dens = checked;
+    s.mode = f.querySelector('input[name=mode]:checked').value;
+    s.hard = f.querySelector('input[name=lvl]:checked').value === 'hard';
+    save('settings', s);
+  });
+  f.addEventListener('submit', function(e){ e.preventDefault(); startRound(); });
+  app.onclick = null;
+}
+
+function renderQuestion(){
+  var q = round.q, last = round.i + 1 >= round.n;
+  var answerArea = q.kind === 'color'
+    ? '<div class="color-actions"><button class="btn primary big" type="button" data-act="check">Kész</button><button class="btn" type="button" data-act="clear">Törlés</button></div>'
+    : '<div class="options'+(q.options.length===2?' two':'')+(q.optClass?' '+q.optClass:'')+'">'+q.options.map(function(o){ return '<button class="opt" type="button" data-v="'+o.v+'">'+o.html+'</button>'; }).join('')+'</div>';
+  app.innerHTML =
+    '<section class="quiz">'+
+    '<div class="quiz-top"><button class="btn plain small" type="button" data-act="quit">‹ Kilépés</button>'+
+      '<div class="bar-track" role="progressbar" aria-label="Haladás" aria-valuemin="0" aria-valuemax="'+round.n+'" aria-valuenow="'+round.i+'"><div class="bar-fill" style="width:'+(round.i/round.n*100)+'%"></div></div>'+
+      '<span class="quiz-count">'+(round.i+1)+'/'+round.n+'</span></div>'+
+    '<article class="card qcard">'+
+      '<div class="qhead"><h2 class="prompt">'+q.prompt+'</h2>'+speakBtn('Felolvasom')+'</div>'+
+      (q.sub ? '<p class="qsub">'+q.sub+'</p>' : '')+
+      (q.visual ? '<div class="visual">'+q.visual+'</div>' : '')+
+      answerArea+
+      '<div class="qtools"><button class="btn small" type="button" data-act="hint">Segítség</button></div>'+
+      '<div class="feedback" aria-live="polite" hidden></div>'+
+    '</article>'+
+    '<div class="quiz-next"><button class="btn primary big" type="button" data-act="next" hidden>'+(last?'Eredmény ›':'Tovább ›')+'</button></div>'+
+    '</section>';
+  var card = app.querySelector('.qcard'), fb = card.querySelector('.feedback'), nextBtn = app.querySelector('[data-act=next]'), hintBtn = card.querySelector('[data-act=hint]');
+  if (q.mount) q.mount(card);
+
+  function feedback(type, html){ fb.className = 'feedback '+type; fb.innerHTML = html; fb.hidden = false; }
+  function finish(ok, extra){
+    q.done = true;
+    [].forEach.call(card.querySelectorAll('.opt'), function(b){ b.disabled = true; if (!b.classList.contains('correct') && !b.classList.contains('wrong')) b.classList.add('faded'); });
+    hintBtn.disabled = true;
+    var sh = card.querySelector('.shape.interactive'); if (sh) sh.classList.add('locked');
+    var cc = card.querySelector('[data-act=check]'), cl = card.querySelector('[data-act=clear]'); if (cc) cc.disabled = true; if (cl) cl.disabled = true;
+    if (ok){
+      var first = q.tries === 0;
+      if (first){ round.score++; addStar(); }
+      feedback('good', '<p class="fb-title">'+(first ? pick(PRAISE) : 'Most már jó!')+'</p><p>'+q.explain+'</p>');
+    } else {
+      var correct = q.options ? q.options.filter(function(o){ return String(o.v) === String(q.answer); })[0] : null;
+      var line = q.binary ? '' : (correct ? '<p>A jó válasz: <b>'+correct.text+'</b>.</p>' : '');
+      feedback('bad', '<p class="fb-title">Semmi baj, nézzük meg együtt!</p>'+(extra?'<p>'+extra+'</p>':'')+line+'<p>'+q.explain+'</p>');
+    }
+    chime(ok);
+    if (q.onDone) q.onDone();
+    nextBtn.hidden = false;
+    setTimeout(function(){ try{ nextBtn.scrollIntoView({block:'nearest', behavior:'smooth'}); nextBtn.focus({preventScroll:true}); }catch(e){} }, 60);
+  }
+  function answerMC(btn){
+    var ok = String(q.answer) === btn.dataset.v;
+    if (ok){ btn.classList.add('correct'); finish(true); return; }
+    btn.classList.add('wrong'); btn.disabled = true; q.tries++;
+    if (q.binary || q.tries >= 2){
+      [].forEach.call(card.querySelectorAll('.opt'), function(b){ if (b.dataset.v === String(q.answer)) b.classList.add('correct'); });
+      finish(false);
+    } else {
+      feedback('try', '<p class="fb-title">Nem egészen. Próbáld újra!</p><p>'+q.hint+'</p>');
+      if (q.onHint) q.onHint();
+      chime(false);
+    }
+  }
+  function checkColor(){
+    var svg = card.querySelector('.shape.interactive'), on = svg.querySelectorAll('.piece.on').length;
+    if (on === 0){ feedback('try', '<p class="fb-title">Még nincs kiszínezve semmi.</p><p>Koppints a darabokra, hogy kiszínezd őket!</p>'); return; }
+    if (on === q.m){ finish(true); return; }
+    q.tries++;
+    var said = 'Most '+on+' darabot színeztél ki.';
+    if (q.tries >= 2){
+      [].forEach.call(svg.querySelectorAll('.piece'), function(p, i){ var v = i < q.m; p.classList.toggle('on', v); p.setAttribute('aria-pressed', v); });
+      finish(false, said+' Megmutatom, hogyan kell.');
+    } else {
+      feedback('try', '<p class="fb-title">Nem egészen. Próbáld újra!</p><p>'+said+' '+q.hint+'</p>');
+      chime(false);
+    }
+  }
+
+  app.onclick = function(e){
+    var opt = e.target.closest('.opt');
+    if (opt){ if (!opt.disabled && !q.done) answerMC(opt); return; }
+    var piece = e.target.closest('.shape.interactive .piece');
+    if (piece){ if (!q.done){ var on = !piece.classList.contains('on'); piece.classList.toggle('on', on); piece.setAttribute('aria-pressed', on); } return; }
+    var a = e.target.closest('[data-act]'); if (!a) return;
+    switch (a.dataset.act){
+      case 'hint': if (!q.done){ feedback('hint', '<p class="fb-title">Segítség</p><p>'+q.hint+'</p>'); if (q.onHint) q.onHint(); } break;
+      case 'check': if (!q.done) checkColor(); break;
+      case 'clear': if (!q.done) [].forEach.call(card.querySelectorAll('.piece.on'), function(p){ p.classList.remove('on'); p.setAttribute('aria-pressed', false); }); break;
+      case 'next': round.i++; nextQuestion(); break;
+      case 'quit': round = null; renderSetup(); break;
+      case 'speak': speak(esc(q.prompt) + (q.sub ? '. ' + q.sub : '')); break;
+    }
+  };
+}
+
+function renderResult(){
+  var s = round.score, n = round.n;
+  var stars = s >= 9 ? 3 : s >= 6 ? 2 : 1;
+  var msg = s === n ? 'Hibátlan! Igazi törtbajnok vagy!' : s >= 8 ? 'Nagyon ügyes vagy!' : s >= 5 ? 'Szép munka! Még egy kör, és még jobban fog menni.' : 'Jó úton jársz! Nézd meg újra a leckéket, aztán próbáld újra.';
+  app.innerHTML =
+    '<section class="card result">'+
+      '<div class="result-stars" aria-label="'+stars+' csillag a háromból">'+[0,1,2].map(function(i){ return starSVG(i < stars ? '' : 'off'); }).join('')+'</div>'+
+      '<h1>'+msg+'</h1>'+
+      '<p class="score">'+n+' feladatból <b>'+s+'</b> sikerült elsőre.</p>'+
+      '<p class="total">Összesen '+state.stars+' csillagot gyűjtöttél.</p>'+
+      '<div class="result-actions"><button class="btn primary big" type="button" data-act="again">Új kör</button><a class="btn" href="#tanulas">Leckék</a><button class="btn" type="button" data-act="setup">Beállítások</button></div>'+
+    '</section>';
+  if (s >= 8) chime(true);
+  app.onclick = function(e){
+    var a = e.target.closest('[data-act]'); if (!a) return;
+    if (a.dataset.act === 'again') startRound();
+    else if (a.dataset.act === 'setup') renderSetup();
+  };
+}
+
+/* ================= routing ================= */
+function route(){
+  try{ speechSynthesis.cancel(); }catch(e){}
+  var h = location.hash.replace('#','');
+  if (h === 'tanulas') renderLessons();
+  else if (h === 'gyakorlas') renderSetup();
+  else renderHome();
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange', route);
+route();
+})();
+</script>
+</body>
+</html>
