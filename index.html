@@ -263,6 +263,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0}
 legend{font-family:var(--font-display);font-weight:600;font-size:1.3rem;padding:0;margin-bottom:12px}
 .choices-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
 .choices-row.dens{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:600px){.choices-row.dens{grid-template-columns:1fr}}
 .choice{position:relative;display:block;cursor:pointer}
 .choice input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
 .choice>span{display:grid;gap:3px;height:100%;padding:13px 40px 13px 15px;border:2px solid var(--border-soft);border-radius:16px;background:var(--card);transition:background .15s}
@@ -271,6 +272,9 @@ legend{font-family:var(--font-display);font-weight:600;font-size:1.3rem;padding:
 .choice>span::after{content:"";position:absolute;top:12px;right:12px;width:20px;height:20px;border-radius:50%;border:2px solid var(--border-soft)}
 .choice input:checked+span{border-color:var(--border);box-shadow:0 4px 0 var(--shadow);background:var(--plate)}
 .choice input:checked+span::after{border-color:var(--border);background:var(--btn-bg);box-shadow:inset 0 0 0 3px var(--plate)}
+/* several parts can be picked at once, so these get a tick box instead of a radio dot */
+.choice input[type=checkbox]+span::after{width:24px;height:24px;top:50%;margin-top:-12px;border-radius:7px;display:grid;place-items:center;font-family:var(--font-body);font-size:15px;font-weight:800;line-height:1}
+.choice input[type=checkbox]:checked+span::after{content:"✓";color:var(--btn-fg);background:var(--btn-bg);box-shadow:none}
 .choice input:focus-visible+span{outline:3px solid var(--focus);outline-offset:2px}
 .choice .den{display:flex;align-items:center;gap:8px;padding-right:36px}
 .choice .dot{width:14px;height:14px;border-radius:50%;flex:none}
@@ -719,7 +723,7 @@ function renderHome(){
       '<h3>'+cap(FR[d].name)+'</h3><p>'+cap(NUM[d])+' egyforma részből egy.</p><p class="hand">'+examples[d]+'</p></div>';
   }).join('')+'</div></section>'+
   '<section class="parents"><h2>Szülőknek</h2>'+
-    '<p>Az alkalmazás csak a 2-es, 3-as és 4-es szorzótáblára épít. A „mennyi a 12 harmada?” típusú feladatoknál a gyerek tányérokra osztja a tárgyakat, és a szorzótáblából keresi a választ: 3 × ? = 12.</p>'+
+    '<p>Az alkalmazás csak a <span class="nowrap">2-es,</span> <span class="nowrap">3-as</span> és <span class="nowrap">4-es</span> szorzótáblára épít. A „mennyi a 12 harmada?” típusú feladatoknál a gyerek tányérokra osztja a tárgyakat, és a szorzótáblából keresi a választ: 3 × ? = 12.</p>'+
     '<p>Törteket és tört jelölést (például 1/2) nem használ, csak a fél, harmad, negyed szavakat és a „fele, harmada, negyede” kifejezéseket.</p>'+
     '<p>A Gyakorlásnál beállíthatod, melyik részekkel és milyen nehézségen dolgozzon. Érdemes csak a féllel kezdeni, aztán jöhet a harmad és a negyed. A csillagok csak ezen az eszközön, ebben a böngészőben tárolódnak.</p>'+
   '</section>';
@@ -1089,8 +1093,8 @@ function renderSetup(){
         [2,3,4].map(function(d){ return '<label class="choice"><input type="checkbox" name="dens" id="dens-'+d+'" value="'+d+'"'+(s.dens.indexOf(d)>=0?' checked':'')+'><span class="den"><i class="dot" style="background:'+COLOR[d]+'"></i><b>'+FR[d].name+'</b></span></label>'; }).join('')+
       '</div><p class="warn" id="densWarn" hidden>Legalább egyet válassz ki!</p></fieldset>'+
       '<fieldset><legend>Milyen nehéz legyen?</legend><div class="choices-row">'+
-        choice('radio','lvl','easy', !s.hard, '<b>Könnyebb</b><small>Kisebb számok: a szorzótábla 5-ig.</small>')+
-        choice('radio','lvl','hard', s.hard, '<b>Nehezebb</b><small>A teljes 2-es, 3-as és 4-es szorzótábla.</small>')+
+        choice('radio','lvl','easy', !s.hard, '<b>Könnyebb</b><small>Kisebb számok: a szorzótábla <span class="nowrap">5-ig</span>.</small>')+
+        choice('radio','lvl','hard', s.hard, '<b>Nehezebb</b><small>A teljes <span class="nowrap">2-es,</span> <span class="nowrap">3-as</span> és <span class="nowrap">4-es</span> szorzótábla.</small>')+
       '</div></fieldset>'+
       '<div><button class="btn primary big" type="submit">Indulhat a kör!</button></div>'+
     '</form></section>';
