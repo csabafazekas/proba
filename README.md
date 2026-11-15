@@ -24,5 +24,6 @@ Nyisd meg az `index.html` fájlt egy böngészőben (telefonon és tableten is m
 - Formák: felismerés, „egyenlő részek-e?”, színezés, melyik darab a nagyobb, hány negyed van egy egészben
 - Számolás: „Mennyi a 12 harmada?”, szöveges feladatok, melyik a több
 - Beállítható, hogy melyik részekkel (fél / harmad / negyed) és milyen nehézségen (szorzótábla 5-ig vagy 10-ig)
-- Rossz válasz után segítséget kap és újra próbálkozhat; a tárgyas feladatoknál a „Segítség” gomb tányérokra osztja a tárgyakat
+- Rossz válasz után segítséget kap és újra próbálkozhat
+- A tárgyakat (almát, pogácsát, golyót) ujjal vagy egérrel át lehet húzni a tányérokra, vagy koppintással rájuk tenni; a „Segítség” gomb szétosztja helyette
 - Minden elsőre jó válaszért csillag jár (csak az adott böngészőben tárolódik)

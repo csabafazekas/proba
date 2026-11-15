@@ -225,11 +225,21 @@ body:not(.can-speak) .speak-btn{display:none}
 .dist-holder{width:100%}
 .dist{display:block;width:100%;height:auto;margin:0 auto}
 .dist .basket{fill:none;stroke:var(--border-soft);stroke-width:2.5;stroke-dasharray:6 7}
-.dist .plate{fill:var(--plate);stroke:var(--border-soft);stroke-width:2.5;stroke-dasharray:9 8;transition:stroke .3s}
-.dist.split .plate{stroke:var(--line);stroke-dasharray:none}
-.dist .item{transition:transform .55s cubic-bezier(.34,1.35,.5,1)}
-.dist .plate-count{font-family:var(--font-display);font-weight:600;font-size:28px;fill:var(--ink);opacity:0;transition:opacity .3s}
-.dist.done .plate-count{opacity:1}
+.dist .plate{fill:var(--plate);stroke:var(--border-soft);stroke-width:2.5;stroke-dasharray:9 8;transition:stroke .2s,fill .2s}
+.dist .plate.filled{stroke:var(--line);stroke-dasharray:none}
+.dist .plate.over{fill:var(--piece-hover);stroke:var(--focus);stroke-width:4;stroke-dasharray:none}
+.dist .item{cursor:grab;touch-action:none;-webkit-tap-highlight-color:transparent}
+.dist .item.dragging{cursor:grabbing}
+.dist.busy .item{cursor:default}
+.dist .item:focus{outline:none}
+.dist .item:focus-visible .hit{stroke:var(--focus);stroke-width:3}
+.dist .hit{fill:none;pointer-events:all}
+.dist .plate-count{font-family:var(--font-display);font-weight:600;font-size:28px;fill:var(--ink-soft);opacity:0;transition:opacity .2s}
+.dist .plate-count.show{opacity:1}
+.dist.done .plate-count{fill:var(--good)}
+.dist-box{display:grid;gap:8px;width:100%}
+.dist-msg{text-align:center;color:var(--ink-soft);font-size:1rem;min-height:1.5em}
+.dist.done+.dist-msg{color:var(--good);font-weight:700}
 .i-apple{fill:var(--apple);stroke:var(--item-line);stroke-width:1.5}
 .i-stem{stroke:var(--stem);stroke-width:2.6;fill:none;stroke-linecap:round}
 .i-leaf{fill:var(--leaf);stroke:var(--item-line);stroke-width:1}
@@ -439,7 +449,11 @@ var ITEM = {
 };
 var ITEM_NAME = {apple:'alma', cookie:'pogácsa', marble:'golyó', star:'matrica', kid:'gyerek'};
 
-/* distribution picture: a basket of items and k plates; split() deals them out one by one */
+var ITEM_PL = {apple:'almákat', cookie:'pogácsákat', marble:'golyókat', star:'matricákat', kid:'gyerekeket'};
+
+/* distribution picture: a basket of items and k plates.
+   The child drags items onto plates or taps them (tap = next plate with the fewest items, tap again = back to the basket).
+   split() deals the rest out automatically. Positions use the SVG transform attribute, animated in JS, so it works the same in every mobile browser. */
 function dist(total, k, kind){
   var s=44, pad=16, per=total/k;
   var pc0=Math.min(total,10), prow=Math.ceil(total/pc0);
@@ -449,35 +463,139 @@ function dist(total, k, kind){
   var plateW=(W-pad*(k+1))/k;
   var pc=Math.max(1, Math.min(per, Math.floor((plateW-12)/s))), pr=Math.ceil(per/pc);
   var py=bh+26, ph=pr*s+20, H=py+ph+44;
-  var home=[], dest=[];
+  var home=[], plateX=[];
   var deco='<rect class="basket" x="'+bx+'" y="3" width="'+bw+'" height="'+(bh-6)+'" rx="18"/>';
   for (var j=0;j<k;j++){
-    var x=pad+j*(plateW+pad);
-    deco += '<rect class="plate" x="'+x+'" y="'+py+'" width="'+plateW+'" height="'+ph+'" rx="20"/><text class="plate-count" x="'+(x+plateW/2)+'" y="'+(py+ph+34)+'" text-anchor="middle">'+per+'</text>';
+    var x=pad+j*(plateW+pad); plateX.push(x);
+    deco += '<rect class="plate" data-p="'+j+'" x="'+x+'" y="'+py+'" width="'+plateW+'" height="'+ph+'" rx="20"/><text class="plate-count" data-c="'+j+'" x="'+(x+plateW/2)+'" y="'+(py+ph+34)+'" text-anchor="middle">0</text>';
   }
-  for (var i=0;i<total;i++){
-    home.push([bx+12+s/2+(i%pc0)*s, 10+s/2+Math.floor(i/pc0)*s]);
-    var jj=i%k, t=Math.floor(i/k), x0=pad+jj*(plateW+pad)+(plateW-pc*s)/2;
-    dest.push([x0+s/2+(t%pc)*s, py+10+s/2+Math.floor(t/pc)*s]);
-  }
-  var items = home.map(function(p){ return '<g class="item" style="transform:translate('+p[0]+'px,'+p[1]+'px)">'+ITEM[kind]+'</g>'; }).join('');
+  for (var i=0;i<total;i++) home.push([bx+12+s/2+(i%pc0)*s, 10+s/2+Math.floor(i/pc0)*s]);
+  function slotPos(j,t){ return [plateX[j]+(plateW-pc*s)/2+s/2+(t%pc)*s, py+10+s/2+Math.floor(t/pc)*s]; }
+  var group = kind === 'kid';
+  var MSG = {
+    start: 'Húzd a '+ITEM_PL[kind]+' a '+(group?'csoportokba':'tányérokra')+', vagy koppints rájuk!',
+    full: group ? 'Ebbe a csoportba már nem fér több. Tedd egy másikba!' : 'Erre a tányérra már nem fér több. Tedd egy másikra!',
+    done: group ? 'Kész! Mindegyik csoportban '+per+' gyerek van.' : 'Kész! Mindegyik tányéron '+per+' '+ITEM_NAME[kind]+' van.'
+  };
+  var items = home.map(function(p,i){ return '<g class="item" data-i="'+i+'" tabindex="0" role="button" aria-label="'+ITEM_NAME[kind]+'" transform="translate('+p[0]+' '+p[1]+')"><circle class="hit" r="22"/>'+ITEM[kind]+'</g>'; }).join('');
   return {
-    html: '<svg class="dist" viewBox="0 0 '+W+' '+H+'" style="max-width:'+W+'px" role="img" aria-label="'+total+' '+ITEM_NAME[kind]+' és '+k+' tányér">'+deco+items+'</svg>',
-    attach: function(holder){
-      var svg = holder.querySelector('svg.dist'), els = [].slice.call(svg.querySelectorAll('.item')), timer=null, isSplit=false;
+    html: '<div class="dist-box"><svg class="dist" viewBox="0 0 '+W+' '+H+'" style="max-width:'+W+'px" role="group" aria-label="'+total+' '+ITEM_NAME[kind]+' és '+k+' '+(group?'csoport':'tányér')+'">'+deco+items+'</svg><p class="dist-msg" aria-live="polite">'+MSG.start+'</p></div>',
+    attach: function(holder, opts){
+      opts = opts || {};
+      var svg = holder.querySelector('svg.dist'), msg = holder.querySelector('.dist-msg');
+      var els = [].slice.call(svg.querySelectorAll('.item')), plates = [].slice.call(svg.querySelectorAll('.plate')), counts = [].slice.call(svg.querySelectorAll('.plate-count'));
       var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var pos = home.map(function(p){ return p.slice(); }), anims = [], loc = [], slotOf = [], occ = [], busy = false, drag = null, wasDone = false, timer = null;
+      for (var i=0;i<total;i++){ loc.push(-1); slotOf.push(-1); }
+      for (var j=0;j<k;j++){ occ.push([]); for (var t=0;t<per;t++) occ[j].push(-1); }
+
+      function setPos(i,p){ pos[i] = p; els[i].setAttribute('transform', 'translate('+p[0].toFixed(1)+' '+p[1].toFixed(1)+')'); }
+      function ease(t){ var c1=1.3, c3=c1+1; return 1 + c3*Math.pow(t-1,3) + c1*Math.pow(t-1,2); }
+      function animTo(i, to, dur, delay){
+        var token = {}; anims[i] = token;
+        if (reduce || !dur){ setPos(i, to); return; }
+        var from = null, t0 = null;
+        function step(now){
+          if (anims[i] !== token) return;
+          if (t0 === null) t0 = now + (delay||0);
+          if (now < t0){ requestAnimationFrame(step); return; }
+          if (from === null) from = pos[i].slice();
+          var t = Math.min(1, (now-t0)/dur), e = ease(t);
+          setPos(i, [from[0]+(to[0]-from[0])*e, from[1]+(to[1]-from[1])*e]);
+          if (t < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+      function count(j){ return occ[j].filter(function(x){ return x >= 0; }).length; }
+      function detach(i){ if (loc[i] >= 0) occ[loc[i]][slotOf[i]] = -1; loc[i] = -1; slotOf[i] = -1; }
+      function putOnPlate(i, j, dur, delay){
+        var t = occ[j].indexOf(-1); if (t < 0) return false;
+        detach(i); loc[i] = j; slotOf[i] = t; occ[j][t] = i;
+        animTo(i, slotPos(j,t), dur, delay); return true;
+      }
+      function putBack(i, dur){ detach(i); animTo(i, home[i], dur); }
+      function bestPlate(){ var best = -1; for (var j=0;j<k;j++){ if (occ[j].indexOf(-1) >= 0 && (best < 0 || count(j) < count(best))) best = j; } return best; }
+      function placedAll(){ return loc.every(function(l){ return l >= 0; }); }
+      function notify(silent){
+        var done = placedAll();
+        for (var j=0;j<k;j++){ var c = count(j); counts[j].textContent = c; counts[j].classList.toggle('show', c > 0); plates[j].classList.toggle('filled', c > 0); }
+        svg.classList.toggle('done', done);
+        if (!silent) msg.textContent = done ? MSG.done : MSG.start;
+        if (done && !wasDone && opts.onDone) opts.onDone();
+        wasDone = done;
+      }
+      function tap(i){
+        if (loc[i] >= 0) putBack(i, 320);
+        else { var j = bestPlate(); if (j >= 0) putOnPlate(i, j, 380); }
+        notify();
+      }
+      function svgPoint(e){
+        var p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY;
+        return p.matrixTransform(svg.getScreenCTM().inverse());
+      }
+      function plateAt(p){
+        for (var j=0;j<k;j++){ if (p.x >= plateX[j]-8 && p.x <= plateX[j]+plateW+8 && p.y >= py-14 && p.y <= py+ph+14) return j; }
+        return -1;
+      }
+      function originOf(i){ return loc[i] >= 0 ? slotPos(loc[i], slotOf[i]) : home[i]; }
+
+      /* stop the page from scrolling while a finger is on an item (iOS ignores touch-action on SVG children) */
+      svg.addEventListener('touchstart', function(e){ if (e.target.closest && e.target.closest('.item')) e.preventDefault(); }, {passive:false});
+      svg.addEventListener('touchmove', function(e){ if (drag) e.preventDefault(); }, {passive:false});
+      svg.addEventListener('pointerdown', function(e){
+        var g = e.target.closest('.item'); if (!g || busy || drag) return;
+        e.preventDefault();
+        var i = +g.dataset.i; anims[i] = null;
+        drag = {i:i, id:e.pointerId, start:svgPoint(e), orig:pos[i].slice(), moved:false};
+        try{ svg.setPointerCapture(e.pointerId); }catch(err){}
+        g.parentNode.appendChild(g); g.classList.add('dragging');
+      });
+      svg.addEventListener('pointermove', function(e){
+        if (!drag || e.pointerId !== drag.id) return;
+        var p = svgPoint(e), dx = p.x-drag.start.x, dy = p.y-drag.start.y;
+        if (!drag.moved && Math.sqrt(dx*dx+dy*dy) > 8) drag.moved = true;
+        if (!drag.moved) return;
+        setPos(drag.i, [drag.orig[0]+dx, drag.orig[1]+dy]);
+        var over = plateAt(p);
+        plates.forEach(function(pl, j){ pl.classList.toggle('over', j === over); });
+      });
+      function endDrag(e, cancelled){
+        if (!drag || e.pointerId !== drag.id) return;
+        var d = drag; drag = null;
+        try{ svg.releasePointerCapture(e.pointerId); }catch(err){}
+        els[d.i].classList.remove('dragging');
+        plates.forEach(function(pl){ pl.classList.remove('over'); });
+        if (cancelled){ animTo(d.i, originOf(d.i), 250); return; }
+        if (!d.moved){ tap(d.i); return; }
+        var j = plateAt(svgPoint(e));
+        if (j < 0){ putBack(d.i, 280); notify(); return; }
+        if (loc[d.i] === j){ animTo(d.i, originOf(d.i), 220); return; }
+        if (!putOnPlate(d.i, j, 220)){ animTo(d.i, originOf(d.i), 300); msg.textContent = MSG.full; return; }
+        notify();
+      }
+      svg.addEventListener('pointerup', function(e){ endDrag(e, false); });
+      svg.addEventListener('pointercancel', function(e){ endDrag(e, true); });
+      svg.addEventListener('keydown', function(e){
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        var g = e.target.closest('.item'); if (!g || busy) return;
+        e.preventDefault(); e.stopPropagation(); tap(+g.dataset.i);
+      });
+
       return {
         split: function(cb){
-          if (isSplit){ if (cb) cb(); return; }
-          isSplit = true; svg.classList.add('split');
-          var step = reduce ? 0 : Math.min(120, 1500/els.length);
-          els.forEach(function(g,i){ g.style.transitionDelay=(i*step)+'ms'; g.style.transform='translate('+dest[i][0]+'px,'+dest[i][1]+'px)'; });
+          if (busy) return;
+          var rest = []; for (var i=0;i<total;i++) if (loc[i] < 0) rest.push(i);
+          if (!rest.length){ notify(); if (cb) cb(); return; }
+          busy = true; svg.classList.add('busy');
+          var step = reduce ? 0 : Math.min(130, 1500/rest.length);
+          rest.forEach(function(i, n){ putOnPlate(i, bestPlate(), 520, n*step); });
           clearTimeout(timer);
-          timer = setTimeout(function(){ svg.classList.add('done'); if (cb) cb(); }, reduce ? 0 : els.length*step+560);
+          timer = setTimeout(function(){ busy = false; svg.classList.remove('busy'); notify(); if (cb) cb(); }, reduce ? 0 : rest.length*step+560);
         },
         reset: function(){
-          isSplit = false; clearTimeout(timer); svg.classList.remove('split','done');
-          els.forEach(function(g,i){ g.style.transitionDelay='0ms'; g.style.transform='translate('+home[i][0]+'px,'+home[i][1]+'px)'; });
+          clearTimeout(timer); busy = false; svg.classList.remove('busy'); wasDone = false;
+          for (var i=0;i<total;i++) putBack(i, 300);
+          notify();
         }
       };
     }
@@ -720,15 +838,18 @@ var LESSONS = [
     return {
       title:'Mennyi a 8 alma fele?',
       html:
-        '<p class="say">Nem csak tortát lehet elosztani! Van 8 almánk. Tegyük őket két tányérra, egyformán.</p>'+
+        '<p class="say">Nem csak tortát lehet elosztani! Van 8 almánk. Rakd át őket a két tányérra úgy, hogy mindkettőn ugyanannyi legyen!</p>'+
         '<div class="dist-holder">'+D.html+'</div>'+
-        '<div class="row"><button class="btn primary big" type="button" data-split>Osszuk szét!</button><button class="btn" type="button" data-again hidden>Még egyszer</button></div>'+
+        '<div class="row"><button class="btn primary" type="button" data-split>Mutasd meg, hogyan kell!</button><button class="btn" type="button" data-again hidden>Még egyszer</button></div>'+
         '<div class="reveal" hidden><p class="say">Mindkét tányéron 4 alma van. <b>A 8 fele 4.</b></p>'+
         '<div class="tip"><p class="hand">A szorzótábla segít!</p><p>Két tányér, mindegyiken 4 alma: <b>2 × 4 = 8</b>. Ezért a 8 fele 4.</p></div></div>',
       bind: function(el){
-        var c = D.attach(el.querySelector('.dist-holder')), sp = el.querySelector('[data-split]'), ag = el.querySelector('[data-again]');
-        sp.addEventListener('click', function(){ sp.disabled = true; c.split(function(){ el.querySelector('.reveal').hidden = false; sp.hidden = true; ag.hidden = false; chime(true); }); });
-        ag.addEventListener('click', function(){ c.reset(); setTimeout(function(){ c.split(); }, 650); });
+        var sp = el.querySelector('[data-split]'), ag = el.querySelector('[data-again]');
+        var c = D.attach(el.querySelector('.dist-holder'), {onDone: function(){
+          el.querySelector('.reveal').hidden = false; sp.hidden = true; ag.hidden = false; chime(true);
+        }});
+        sp.addEventListener('click', function(){ c.split(); });
+        ag.addEventListener('click', function(){ c.reset(); ag.hidden = true; sp.hidden = false; });
       }
     };
   },
@@ -739,16 +860,20 @@ var LESSONS = [
       '<div class="seg" role="radiogroup" aria-label="Hány tányérra osszuk szét?">'+
         [2,3,4].map(function(d){ return '<button type="button" role="radio" aria-checked="'+(d===2)+'" data-d="'+d+'">'+cap(FR[d].poss)+'<small>'+d+' tányér</small></button>'; }).join('')+'</div>'+
       '<div class="dist-holder" id="l7d"></div>'+
+      '<div class="row"><button class="btn primary" type="button" data-split>Mutasd meg, hogyan kell!</button></div>'+
       '<p class="result-line" id="l7r" aria-live="polite"></p>'+
       '<div class="tip"><p class="hand">Trükk</p><p>Keresd meg a szorzótáblában! Ha a 12 harmadát keresed, ezt kérdezd: <b>3 × ? = 12</b>. A válasz 4, ezért a 12 harmada 4.</p></div>',
     bind: function(el){
-      var holder = el.querySelector('#l7d'), res = el.querySelector('#l7r'), timer = null;
+      var holder = el.querySelector('#l7d'), res = el.querySelector('#l7r'), sp = el.querySelector('[data-split]'), c = null;
       function show(d){
-        clearTimeout(timer);
-        var D = dist(12, d, 'cookie'); holder.innerHTML = D.html; var c = D.attach(holder);
+        var D = dist(12, d, 'cookie'); holder.innerHTML = D.html;
+        c = D.attach(holder, {onDone: function(){
+          res.innerHTML = 'Egy tányérra '+(12/d)+' pogácsa jutott. <b>A 12 '+FR[d].poss+' '+(12/d)+'</b>, mert '+d+' × '+(12/d)+' = 12.';
+          chime(true);
+        }});
         res.innerHTML = '';
-        timer = setTimeout(function(){ c.split(function(){ res.innerHTML = 'Egy tányérra '+(12/d)+' pogácsa jutott. <b>A 12 '+FR[d].poss+' '+(12/d)+'</b>, mert '+d+' × '+(12/d)+' = 12.'; }); }, 450);
       }
+      sp.addEventListener('click', function(){ if (c) c.split(); });
       bindSeg(el.querySelector('.seg'), show);
       show(2);
     }
