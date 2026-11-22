@@ -25,6 +25,8 @@
   --half:#F28A2E;
   --third:#14A39A;
   --quarter:#9A6FE0;
+  --fifth:#E0559A;
+  --sixth:#73A832;
   --whole:#E8B84A;
   --pencil:#3B82E0;
   --on-color:#1A2236;
@@ -48,7 +50,7 @@
     --paper:#131A29; --grid:#1B2436; --card:#1B2438; --ink:#EDF1F9; --ink-soft:#A6B1C6;
     --border:#3A4868; --border-soft:#46547A; --shadow:#090D16; --line:#DDE4F1;
     --piece:#26314A; --piece-hover:#2F3C59;
-    --half:#F79A45; --third:#2BBBB1; --quarter:#AE8BF0; --whole:#EDC25C; --pencil:#5D9DF2;
+    --half:#F79A45; --third:#2BBBB1; --quarter:#AE8BF0; --fifth:#F37BB4; --sixth:#97CC57; --whole:#EDC25C; --pencil:#5D9DF2;
     --on-color:#141B2B; --teacher:#FF8D7E;
     --good:#4CC384; --good-bg:#16352A; --bad:#F07171; --bad-bg:#3A1E24; --try:#F2C14E; --try-bg:#3A3119;
     --star:#F7C531; --btn-bg:#F2C14E; --btn-fg:#151B29; --focus:#7FB2F7; --plate:#222C42;
@@ -61,7 +63,7 @@
   --paper:#131A29; --grid:#1B2436; --card:#1B2438; --ink:#EDF1F9; --ink-soft:#A6B1C6;
   --border:#3A4868; --border-soft:#46547A; --shadow:#090D16; --line:#DDE4F1;
   --piece:#26314A; --piece-hover:#2F3C59;
-  --half:#F79A45; --third:#2BBBB1; --quarter:#AE8BF0; --whole:#EDC25C; --pencil:#5D9DF2;
+  --half:#F79A45; --third:#2BBBB1; --quarter:#AE8BF0; --fifth:#F37BB4; --sixth:#97CC57; --whole:#EDC25C; --pencil:#5D9DF2;
   --on-color:#141B2B; --teacher:#FF8D7E;
   --good:#4CC384; --good-bg:#16352A; --bad:#F07171; --bad-bg:#3A1E24; --try:#F2C14E; --try-bg:#3A3119;
   --star:#F7C531; --btn-bg:#F2C14E; --btn-fg:#151B29; --focus:#7FB2F7; --plate:#222C42;
@@ -134,17 +136,39 @@ body:not(.can-speak) .speak-btn{display:none}
 .shape.locked{pointer-events:none}
 
 /* ---------- home ---------- */
-.hero{display:grid;gap:22px;padding-block:6px 30px;align-items:center}
-@media (min-width:700px){.hero{grid-template-columns:1fr auto}}
+.hero{display:grid;gap:12px;padding-block:6px 22px}
 .hero h1{font-size:clamp(2.3rem,7.5vw,3.5rem);font-weight:700;letter-spacing:-.01em}
 .hero h1 .mk{padding:0 .06em;border-radius:.12em}
 .hero h1 .mk-half{box-shadow:inset 0 -.24em 0 var(--half)}
 .hero h1 .mk-third{box-shadow:inset 0 -.24em 0 var(--third)}
 .hero h1 .mk-quarter{box-shadow:inset 0 -.24em 0 var(--quarter)}
-.hero .lead{font-size:1.15rem;color:var(--ink-soft);max-width:38ch;margin-top:12px}
-.hero-pies{display:flex;gap:clamp(12px,3.5vw,22px);flex-wrap:wrap}
-.hero-pie{display:grid;justify-items:center;gap:8px;width:clamp(84px,24vw,112px);margin:0}
-.hero-pie figcaption{font-family:var(--font-display);font-weight:600;font-size:1.15rem;display:inline-flex;gap:6px;align-items:center}
+.hero .lead{font-size:1.15rem;color:var(--ink-soft);max-width:44ch}
+
+/* part chooser: fél and harmad are fixed, the rest are tick-box cards */
+.parts-card{display:grid;gap:16px;margin-bottom:22px}
+.parts-head{display:grid;gap:2px}
+.parts-head h2{font-size:1.5rem}
+.parts-head p{color:var(--ink-soft)}
+.parts{display:grid;gap:16px}
+@media (min-width:640px){.parts{grid-template-columns:2fr 3fr;gap:20px}}
+.part-group{display:grid;gap:8px;align-content:start;min-width:0}
+.part-label{font-family:var(--font-hand);font-size:1.25rem;color:var(--teacher);line-height:1.1}
+.part-row{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:10px}
+.part{position:relative;display:block;min-width:0}
+.part input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;z-index:1}
+.part-box{position:relative;display:grid;justify-items:center;gap:4px;height:100%;padding:12px 6px 10px;border:2px solid var(--border-soft);border-radius:16px;background:var(--card);text-align:center;transition:background .15s}
+.part-box .shape{width:min(60px,72%)}
+.part-box b{font-family:var(--font-display);font-weight:600;font-size:1.12rem;line-height:1.1}
+.part-box small{font-size:.8rem;font-weight:700;color:var(--ink-soft)}
+.part.fixed .part-box{background:var(--plate);border-style:dashed}
+.part input:checked+.part-box{border-color:var(--border);box-shadow:0 4px 0 var(--shadow)}
+.part input:not(:checked)+.part-box .shape{filter:grayscale(1);opacity:.4}
+.part input:not(:checked)+.part-box b{color:var(--ink-soft)}
+.part input:focus-visible+.part-box{outline:3px solid var(--focus);outline-offset:2px}
+.part input+.part-box::after{content:"";position:absolute;top:7px;right:7px;width:20px;height:20px;border-radius:6px;border:2px solid var(--border-soft);display:grid;place-items:center;font-family:var(--font-body);font-size:13px;font-weight:800;line-height:1}
+.part input:checked+.part-box::after{content:"✓";background:var(--btn-bg);color:var(--btn-fg);border-color:var(--border)}
+.parts-note{color:var(--ink-soft);font-size:.95rem}
+.dot{display:inline-block;width:14px;height:14px;border-radius:50%;flex:none}
 
 .choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
 .bigcard{display:grid;gap:10px;align-content:start;text-decoration:none;background:var(--card);border:2px solid var(--border);border-radius:24px;box-shadow:0 5px 0 var(--shadow);padding:22px;transition:transform .12s ease}
@@ -209,12 +233,23 @@ body:not(.can-speak) .speak-btn{display:none}
 .compare-row figure{margin:0;display:grid;justify-items:center;gap:4px;width:clamp(78px,21vw,112px)}
 .compare-row figcaption{font-family:var(--font-display);font-weight:600}
 .compare-row .gt{font-family:var(--font-display);font-size:2.2rem;font-weight:700;color:var(--ink-soft)}
+.compare-row.many figure{width:clamp(62px,16vw,92px)}
+.compare-row.many figcaption{font-size:.85rem}
+.compare-row.many .gt{font-size:1.6rem}
+/* on a phone four or more pies sit in one row, biggest piece on the left, with a scale above instead of ">" signs */
+.cmp-scale{display:none;justify-content:space-between;font-size:.85rem;font-weight:800;color:var(--ink-soft);margin-bottom:-12px}
+@media (max-width:560px){
+  .cmp-scale{display:flex}
+  .compare-row.many{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:4px;align-items:start}
+  .compare-row.many .gt,.compare-row.many .cap-art{display:none}
+  .compare-row.many figure{width:auto;min-width:0}
+  .compare-row.many figcaption{font-size:clamp(.62rem,3.2vw,.78rem);white-space:nowrap}
+}
 .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .result-line{font-size:1.2rem;text-align:center;min-height:1.6em}
-.facts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-@media (max-width:480px){.facts{grid-template-columns:1fr}}
-.facts li{font-family:var(--font-display);font-weight:600;font-size:1.2rem;padding:10px 14px;background:var(--plate);border-radius:14px}
-.facts li small{display:block;font-family:var(--font-body);font-weight:600;font-size:.85rem;color:var(--ink-soft)}
+.facts{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.facts li{font-size:1.05rem;padding:10px 14px;background:var(--plate);border-radius:14px}
+.facts li b{font-family:var(--font-display);font-weight:600}
 .pager{display:flex;justify-content:space-between;gap:12px;margin-top:20px;flex-wrap:wrap}
 
 /* ---------- distribution picture ---------- */
@@ -262,8 +297,12 @@ body:not(.can-speak) .speak-btn{display:none}
 fieldset{border:0;padding:0;margin:0;min-width:0}
 legend{font-family:var(--font-display);font-weight:600;font-size:1.3rem;padding:0;margin-bottom:12px}
 .choices-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
-.choices-row.dens{grid-template-columns:repeat(3,minmax(0,1fr))}
-@media (max-width:600px){.choices-row.dens{grid-template-columns:1fr}}
+.parts-summary{display:grid;gap:8px}
+.parts-summary-title{font-family:var(--font-display);font-weight:600;font-size:1.3rem}
+.part-chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.part-chips li{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border:2px solid var(--border-soft);border-radius:999px;font-family:var(--font-display);font-weight:600;background:var(--card)}
+.parts-summary-note{color:var(--ink-soft);font-size:.95rem}
+.parts-summary-note a{font-weight:800;color:var(--ink)}
 .choice{position:relative;display:block;cursor:pointer}
 .choice input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
 .choice>span{display:grid;gap:3px;height:100%;padding:13px 40px 13px 15px;border:2px solid var(--border-soft);border-radius:16px;background:var(--card);transition:background .15s}
@@ -363,12 +402,18 @@ var state = {
   stars: +load('stars', 0) || 0,
   sound: load('sound', true) !== false,
   lesson: load('lesson', 0),
-  settings: Object.assign({mode:'mix', dens:[2,3,4], hard:false}, load('settings', {}) || {})
+  settings: Object.assign({mode:'mix', hard:false}, load('settings', {}) || {}),
+  parts: load('parts', [2,3,4])
 };
-if (!Array.isArray(state.settings.dens) || !state.settings.dens.length) state.settings.dens = [2,3,4];
-state.settings.dens = state.settings.dens.map(Number).filter(function(d){ return d===2||d===3||d===4; });
-if (!state.settings.dens.length) state.settings.dens = [2,3,4];
 if (['forms','numbers','mix'].indexOf(state.settings.mode) < 0) state.settings.mode = 'mix';
+/* the parts in the curriculum: fél and harmad always, negyed, ötöd and hatod are optional (chosen on the home page) */
+var REQUIRED = [2,3], OPTIONAL = [4,5,6];
+function cleanParts(a){
+  var opt = (Array.isArray(a) ? a : []).map(Number).filter(function(d){ return OPTIONAL.indexOf(d) >= 0; });
+  return REQUIRED.concat(OPTIONAL.filter(function(d){ return opt.indexOf(d) >= 0; }));
+}
+state.parts = cleanParts(state.parts);
+function parts(){ return state.parts.slice(); }
 
 /* ================= helpers ================= */
 function rnd(a,b){ return a + Math.floor(Math.random()*(b-a+1)); }
@@ -378,20 +423,33 @@ function range(n){ var r=[]; for(var i=0;i<n;i++) r.push(i); return r; }
 function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 function az(n){ return (n===1 || n===5 || (n>=50 && n<60)) ? 'az' : 'a'; }
 function gcd(a,b){ return b ? gcd(b, a%b) : a; }
-var NUM = {1:'egy', 2:'két', 3:'három', 4:'négy'};
+var NUM = {1:'egy', 2:'két', 3:'három', 4:'négy', 5:'öt', 6:'hat'};
+/* "-ra/-re" forms used in "ha háromra vágjuk" */
+var ONTO = {2:'kettőre', 3:'háromra', 4:'négyre', 5:'ötre', 6:'hatra'};
+/* table each part needs */
+var TABLE = {2:'2-es', 3:'3-as', 4:'4-es', 5:'5-ös', 6:'6-os'};
+/* Hungarian article: "az" before a vowel */
+function art(w){ return /^[aáeéiíoóöőuúüű]/i.test(w) ? 'az '+w : 'a '+w; }
 var FR = {
-  2:{name:'fél',    poss:'fele',    acc:'felét'},
-  3:{name:'harmad', poss:'harmada', acc:'harmadát'},
-  4:{name:'negyed', poss:'negyede', acc:'negyedét'}
+  2:{name:'fél',    poss:'fele',    acc:'felét',    onto:'félre'},
+  3:{name:'harmad', poss:'harmada', acc:'harmadát', onto:'harmadra'},
+  4:{name:'negyed', poss:'negyede', acc:'negyedét', onto:'negyedre'},
+  5:{name:'ötöd',   poss:'ötöde',   acc:'ötödét',   onto:'ötödre'},
+  6:{name:'hatod',  poss:'hatoda',  acc:'hatodát',  onto:'hatodra'}
 };
-var COLOR = {1:'var(--whole)', 2:'var(--half)', 3:'var(--third)', 4:'var(--quarter)'};
+var COLOR = {1:'var(--whole)', 2:'var(--half)', 3:'var(--third)', 4:'var(--quarter)', 5:'var(--fifth)', 6:'var(--sixth)'};
 var PENCIL = 'var(--pencil)';
 function eqSizes(n){ var a=[]; for(var i=0;i<n;i++) a.push(1/n); return a; }
+/* "a, b és c" */
+function andList(a){ return a.length < 2 ? a.join('') : a.slice(0,-1).join(', ')+' és '+a[a.length-1]; }
+function orList(a){ return a.length < 2 ? a.join('') : a.slice(0,-1).join(', ')+' vagy '+a[a.length-1]; }
 /* unequal cuts: no piece is close to 1/d, so "not equal" is always visibly true */
 var UNEQ = {
   2:[[.36,.64],[.62,.38],[.3,.7]],
   3:[[.2,.25,.55],[.5,.24,.26],[.16,.6,.24]],
-  4:[[.12,.16,.36,.36],[.4,.12,.32,.16],[.18,.38,.12,.32]]
+  4:[[.12,.16,.36,.36],[.4,.12,.32,.16],[.18,.38,.12,.32]],
+  5:[[.1,.35,.12,.33,.1],[.32,.11,.13,.3,.14],[.12,.28,.1,.38,.12]],
+  6:[[.08,.25,.1,.24,.08,.25],[.22,.09,.26,.1,.23,.1],[.06,.3,.1,.22,.1,.22]]
 };
 var ACC = {torta:'tortát', pizza:'pizzát', csoki:'csokit'};
 function esc(s){ return String(s).replace(/<[^>]*>/g,''); }
@@ -423,7 +481,7 @@ function bar(o){
   sizes.forEach(function(s,i){ var w=s*W; out += '<rect '+pieceAttrs(i,on.indexOf(i)>=0,inter)+' x="'+x.toFixed(2)+'" y="'+Y+'" width="'+w.toFixed(2)+'" height="'+H+'"/>'; x+=w; });
   return '<svg class="shape bar'+(inter?' interactive':'')+'" viewBox="0 0 320 120" style="--c:'+color+'" role="'+(inter?'group':'img')+'" aria-label="'+(o.label||'csoki')+'"><defs><clipPath id="'+id+'"><rect x="'+X+'" y="'+Y+'" width="'+W+'" height="'+H+'" rx="12"/></clipPath></defs><g clip-path="url(#'+id+')">'+out+'</g><rect class="outline" x="'+X+'" y="'+Y+'" width="'+W+'" height="'+H+'" rx="12"/></svg>';
 }
-var GRIDS = {2:[1,2], 3:[1,3], 4:[2,2], 6:[2,3], 8:[2,4], 9:[3,3], 12:[3,4]};
+var GRIDS = {2:[1,2], 3:[1,3], 4:[2,2], 5:[1,5], 6:[2,3], 8:[2,4], 9:[3,3], 10:[2,5], 12:[3,4]};
 function grid(o){
   var rows=o.rows, cols=o.cols, on=o.on||[], color=o.color||PENCIL, inter=!!o.interactive, id='cl'+(++uid);
   var c=56, X=4, Y=4, W=cols*c, H=rows*c, out='';
@@ -457,20 +515,24 @@ var ITEM_PL = {apple:'almákat', cookie:'pogácsákat', marble:'golyókat', star
 function dist(total, k, kind){
   var s=44, pad=16, per=total/k;
   var pc0=Math.min(total,10), prow=Math.ceil(total/pc0);
+  /* 5 or 6 plates go in two rows, so each plate stays wide enough to hold its items */
+  var ppr = k <= 4 ? k : Math.ceil(k/2), rows = Math.ceil(k/ppr);
   /* small counts get a narrower picture, so items keep their size instead of shrinking */
-  var W=Math.min(640, Math.max(300, pc0*s+24+2*pad, k*(Math.min(per,5)*s+24)+pad*(k+1)));
+  var W=Math.min(640, Math.max(300, pc0*s+24+2*pad, ppr*(Math.min(per,5)*s+24)+pad*(ppr+1)));
   var bw=pc0*s+24, bx=(W-bw)/2, bh=prow*s+20;
-  var plateW=(W-pad*(k+1))/k;
+  var plateW=(W-pad*(ppr+1))/ppr;
   var pc=Math.max(1, Math.min(per, Math.floor((plateW-12)/s))), pr=Math.ceil(per/pc);
-  var py=bh+26, ph=pr*s+20, H=py+ph+44;
-  var home=[], plateX=[];
+  var py=bh+26, ph=pr*s+20, rowH=ph+50, H=py+rows*rowH-6;
+  var home=[], plateX=[], plateY=[];
   var deco='<rect class="basket" x="'+bx+'" y="3" width="'+bw+'" height="'+(bh-6)+'" rx="18"/>';
   for (var j=0;j<k;j++){
-    var x=pad+j*(plateW+pad); plateX.push(x);
-    deco += '<rect class="plate" data-p="'+j+'" x="'+x+'" y="'+py+'" width="'+plateW+'" height="'+ph+'" rx="20"/><text class="plate-count" data-c="'+j+'" x="'+(x+plateW/2)+'" y="'+(py+ph+34)+'" text-anchor="middle">0</text>';
+    var r=Math.floor(j/ppr), c=j%ppr, inRow=(r===rows-1) ? k-ppr*(rows-1) : ppr;
+    var x=(W-(inRow*plateW+(inRow-1)*pad))/2 + c*(plateW+pad), y=py+r*rowH;
+    plateX.push(x); plateY.push(y);
+    deco += '<rect class="plate" data-p="'+j+'" x="'+x+'" y="'+y+'" width="'+plateW+'" height="'+ph+'" rx="20"/><text class="plate-count" data-c="'+j+'" x="'+(x+plateW/2)+'" y="'+(y+ph+34)+'" text-anchor="middle">0</text>';
   }
   for (var i=0;i<total;i++) home.push([bx+12+s/2+(i%pc0)*s, 10+s/2+Math.floor(i/pc0)*s]);
-  function slotPos(j,t){ return [plateX[j]+(plateW-pc*s)/2+s/2+(t%pc)*s, py+10+s/2+Math.floor(t/pc)*s]; }
+  function slotPos(j,t){ return [plateX[j]+(plateW-pc*s)/2+s/2+(t%pc)*s, plateY[j]+10+s/2+Math.floor(t/pc)*s]; }
   var group = kind === 'kid';
   var MSG = {
     start: 'Húzd a '+ITEM_PL[kind]+' a '+(group?'csoportokba':'tányérokra')+', vagy koppints rájuk!',
@@ -534,7 +596,7 @@ function dist(total, k, kind){
         return p.matrixTransform(svg.getScreenCTM().inverse());
       }
       function plateAt(p){
-        for (var j=0;j<k;j++){ if (p.x >= plateX[j]-8 && p.x <= plateX[j]+plateW+8 && p.y >= py-14 && p.y <= py+ph+14) return j; }
+        for (var j=0;j<k;j++){ if (p.x >= plateX[j]-8 && p.x <= plateX[j]+plateW+8 && p.y >= plateY[j]-14 && p.y <= plateY[j]+ph+14) return j; }
         return -1;
       }
       function originOf(i){ return loc[i] >= 0 ? slotPos(loc[i], slotOf[i]) : home[i]; }
@@ -695,38 +757,62 @@ document.addEventListener('keydown', function(e){
 });
 
 /* ================= HOME ================= */
+function partNames(){ return andList(parts().map(function(d){ return art(FR[d].name); })); }
+function partCard(d, fixed){
+  var on = state.parts.indexOf(d) >= 0;
+  var body = pie({sizes:eqSizes(d), on:[0], color:COLOR[d], label:FR[d].name})+'<b>'+FR[d].name+'</b><small>'+(fixed ? 'mindig' : (on ? 'benne van' : 'kimarad'))+'</small>';
+  if (fixed) return '<div class="part fixed"><span class="part-box">'+body+'</span></div>';
+  return '<label class="part"><input type="checkbox" id="part-'+d+'" value="'+d+'"'+(on?' checked':'')+'><span class="part-box">'+body+'</span></label>';
+}
 function renderHome(){
+  var count = buildLessons().length;
+  if (state.lesson >= count) state.lesson = 0;
   var resume = state.lesson > 0 ? '<p class="resume">Itt tartasz: '+(state.lesson+1)+'. lecke</p>' : '';
   var examples = {
     2:'a 8 fele 4, <span class="nowrap">mert 2 × 4 = 8</span>',
     3:'a 12 harmada 4, <span class="nowrap">mert 3 × 4 = 12</span>',
-    4:'a 20 negyede 5, <span class="nowrap">mert 4 × 5 = 20</span>'
+    4:'a 20 negyede 5, <span class="nowrap">mert 4 × 5 = 20</span>',
+    5:'a 15 ötöde 3, <span class="nowrap">mert 5 × 3 = 15</span>',
+    6:'a 18 hatoda 3, <span class="nowrap">mert 6 × 3 = 18</span>'
   };
   app.innerHTML =
   '<section class="hero">'+
-    '<div><h1><span class="mk mk-half">Fél</span>, <span class="mk mk-third">harmad</span>, <span class="mk mk-quarter">negyed</span></h1>'+
-    '<p class="lead">Hogyan osztozzunk igazságosan egy tortán, egy csokin vagy egy kosár almán? Nézd meg a leckéket, aztán gyakorolj!</p></div>'+
-    '<div class="hero-pies">'+[2,3,4].map(function(d){
-      return '<figure class="hero-pie">'+pie({sizes:eqSizes(d), on:[0], color:COLOR[d], label:FR[d].name})+'<figcaption>'+FR[d].name+'</figcaption></figure>';
-    }).join('')+'</div>'+
+    '<h1><span class="mk mk-half">Fél</span>, <span class="mk mk-third">harmad</span>, <span class="mk mk-quarter">negyed</span></h1>'+
+    '<p class="lead">Hogyan osztozzunk igazságosan egy tortán, egy csokin vagy egy kosár almán? Nézd meg a leckéket, aztán gyakorolj!</p>'+
+  '</section>'+
+  '<section class="card parts-card" aria-labelledby="partsTitle">'+
+    '<div class="parts-head"><h2 id="partsTitle">Mit tanuljunk?</h2><p>A leckék és a feladatok is ehhez igazodnak.</p></div>'+
+    '<div class="parts">'+
+      '<div class="part-group"><p class="part-label">Mindig benne van</p><div class="part-row" style="--n:2">'+REQUIRED.map(function(d){ return partCard(d, true); }).join('')+'</div></div>'+
+      '<div class="part-group"><p class="part-label">Választható</p><div class="part-row" style="--n:3">'+OPTIONAL.map(function(d){ return partCard(d, false); }).join('')+'</div></div>'+
+    '</div>'+
+    '<p class="parts-note">A negyedhez a <span class="nowrap">4-es,</span> az ötödhöz az <span class="nowrap">5-ös,</span> a hatodhoz a <span class="nowrap">6-os</span> szorzótábla kell.</p>'+
   '</section>'+
   '<div class="choices">'+
     '<a class="bigcard" href="#tanulas"><span class="bigcard-ill">'+pie({sizes:eqSizes(4), on:[0], color:COLOR[4], label:'négy darabra vágott torta'})+bar({sizes:eqSizes(3), on:[1], color:COLOR[3], label:'három darabra tört csoki'})+'</span>'+
-      '<h2>Tanulás</h2><p>8 rövid lecke képekkel: mit jelent a fél, a harmad és a negyed?</p>'+resume+
+      '<h2>Tanulás</h2><p>'+count+' rövid lecke képekkel: mit jelent '+partNames()+'?</p>'+resume+
       '<span class="btn primary">'+(state.lesson>0?'Folytatom':'Kezdjük!')+'</span></a>'+
     '<a class="bigcard" href="#gyakorlas"><span class="bigcard-ill">'+grid({rows:2, cols:3, on:[0,1,2], label:'félig kiszínezett csoki'})+starSVG('ill-star')+'</span>'+
       '<h2>Gyakorlás</h2><p>Tíz feladatos körök. Minden elsőre jó válasz egy csillagot ér.</p>'+
       '<span class="btn">Gyakorlok</span></a>'+
   '</div>'+
-  '<section class="card puska"><h2>Kis puska</h2><div class="puska-grid">'+[2,3,4].map(function(d){
+  '<section class="card puska"><h2>Kis puska</h2><div class="puska-grid">'+parts().map(function(d){
     return '<div class="puska-item">'+pie({sizes:eqSizes(d), on:[0], color:COLOR[d], label:FR[d].name})+
       '<h3>'+cap(FR[d].name)+'</h3><p>'+cap(NUM[d])+' egyforma részből egy.</p><p class="hand">'+examples[d]+'</p></div>';
   }).join('')+'</div></section>'+
   '<section class="parents"><h2>Szülőknek</h2>'+
-    '<p>Az alkalmazás csak a <span class="nowrap">2-es,</span> <span class="nowrap">3-as</span> és <span class="nowrap">4-es</span> szorzótáblára épít. A „mennyi a 12 harmada?” típusú feladatoknál a gyerek tányérokra osztja a tárgyakat, és a szorzótáblából keresi a választ: 3 × ? = 12.</p>'+
-    '<p>Törteket és tört jelölést (például 1/2) nem használ, csak a fél, harmad, negyed szavakat és a „fele, harmada, negyede” kifejezéseket.</p>'+
-    '<p>A Gyakorlásnál beállíthatod, melyik részekkel és milyen nehézségen dolgozzon. Érdemes csak a féllel kezdeni, aztán jöhet a harmad és a negyed. A csillagok csak ezen az eszközön, ebben a böngészőben tárolódnak.</p>'+
+    '<p>A számolós feladatok a bekapcsolt részek szorzótábláira épülnek: fél – <span class="nowrap">2-es,</span> harmad – <span class="nowrap">3-as,</span> negyed – <span class="nowrap">4-es,</span> ötöd – <span class="nowrap">5-ös,</span> hatod – <span class="nowrap">6-os.</span> A „mennyi a 12 harmada?” típusú feladatoknál a gyerek tányérokra osztja a tárgyakat, és a szorzótáblából keresi a választ: 3 × ? = 12.</p>'+
+    '<p>Törteket és tört jelölést (például 1/2) nem használ, csak a fél, harmad, negyed, ötöd, hatod szavakat és a „fele, harmada, negyede…” kifejezéseket.</p>'+
+    '<p>Érdemes a féllel és a harmaddal kezdeni, és csak akkor bekapcsolni a többit, ha a hozzá tartozó szorzótábla már megy. A Gyakorlásnál a nehézséget is beállíthatod. A beállítások és a csillagok csak ezen az eszközön, ebben a böngészőben tárolódnak.</p>'+
   '</section>';
+  app.querySelector('.parts').addEventListener('change', function(e){
+    var d = +e.target.value, on = e.target.checked;
+    var opt = state.parts.filter(function(x){ return x !== d; });
+    if (on) opt.push(d);
+    state.parts = cleanParts(opt); save('parts', state.parts);
+    renderHome();
+    var again = document.getElementById('part-'+d); if (again) again.focus({preventScroll:true});
+  });
   app.onclick = null;
 }
 
@@ -738,21 +824,19 @@ function bindSeg(seg, onPick){
     onPick(+b.dataset.d);
   });
 }
-function lessonCut(d){
+function lessonCut(d, last){
   var intro = {
     2:'Van egy tortánk. Ketten osztoztok rajta: te és a barátod. Mindkettőtöknek ugyanannyi jár.',
     3:'Most hárman vagytok: te és két barátod. A tortát három egyforma darabra kell vágni.',
-    4:'Jött még egy barát, már négyen vagytok. Most négy egyforma darab kell.'
+    4:'Most négyen vagytok: te és három barátod. Négy egyforma darab kell.',
+    5:'Most öten vagytok: te és négy barátod. Öt egyforma darab kell.',
+    6:'Most hatan vagytok: te és öt barátod. Hat egyforma darab kell.'
   }[d];
-  var btn = {2:'Vágjuk ketté!', 3:'Vágjuk háromfelé!', 4:'Vágjuk négyfelé!'}[d];
-  var after = {
-    2:'Két egyforma darab lett. <b>Egy darab a torta fele.</b> A két darab együtt kiadja az egész tortát.',
-    3:'Három egyforma darab lett. <b>Egy darab a torta harmada.</b> A három darab együtt kiadja az egész tortát.',
-    4:'Négy egyforma darab lett. <b>Egy darab a torta negyede.</b> A négy darab együtt kiadja az egész tortát.'
-  }[d];
-  var names = d === 4 ? '<div class="tip"><p class="hand">Figyeld meg!</p><p>A név elárulja, hány egyforma részre vágtunk: <b>2 rész: fél</b>, <b>3 rész: harmad</b>, <b>4 rész: negyed</b>.</p></div>' : '';
+  var btn = {2:'Vágjuk ketté!', 3:'Vágjuk háromfelé!', 4:'Vágjuk négyfelé!', 5:'Vágjuk ötfelé!', 6:'Vágjuk hatfelé!'}[d];
+  var after = cap(NUM[d])+' egyforma darab lett. <b>Egy darab a torta '+FR[d].poss+'.</b> '+cap(art(NUM[d]))+' darab együtt kiadja az egész tortát.';
+  var names = last ? '<div class="tip"><p class="hand">Figyeld meg!</p><p>A név elárulja, hány egyforma részre vágtunk: '+parts().map(function(x){ return '<b>'+x+' rész: '+FR[x].name+'</b>'; }).join(', ')+'.</p></div>' : '';
   return {
-    title: 'Mi az a '+FR[d].name+'?',
+    title: 'Mi az '+art(FR[d].name)+'?',
     html:
       '<p class="say">'+intro+'</p>'+
       '<div class="stage"><div class="pie-holder">'+pie({sizes:[1], color:COLOR[d], label:'egész torta'})+'</div>'+
@@ -779,11 +863,9 @@ function lessonCut(d){
     }
   };
 }
-var LESSONS = [
-  function(){ return lessonCut(2); },
-  function(){ return lessonCut(3); },
-  function(){ return lessonCut(4); },
-  function(){ return {
+function lessonFair(){
+  var others = parts().filter(function(d){ return d !== 2; });
+  return {
     title:'Csak az egyforma darab számít!',
     html:
       '<p class="say">Bence kettétörte a csokiját, és a kisebbik darabot odaadta Annának. Azt mondta: „Tessék, ez a fele!”</p>'+
@@ -793,7 +875,7 @@ var LESSONS = [
       '<div class="reveal" hidden><p class="fb-line"></p>'+
       '<p class="say">Fél csak akkor van, ha a két darab <b>pontosan ugyanakkora</b>. Így lett volna igazságos:</p>'+
       '<figure class="figure">'+bar({sizes:[.5,.5], on:[0], color:COLOR[2], label:'Igazságosan kettétört csoki'})+'<figcaption class="caption">Ez már tényleg a csoki fele.</figcaption></figure>'+
-      '<p class="say">Ugyanez igaz a harmadra és a negyedre is: csak egyforma darabokról mondhatjuk, hogy harmad vagy negyed.</p></div>',
+      '<p class="say">Ugyanez igaz '+andList(others.map(function(d){ return art(FR[d].onto); }))+' is: csak egyforma darabokról mondhatjuk, hogy '+orList(others.map(function(d){ return FR[d].name; }))+'.</p></div>',
     bind: function(el){
       var opts = el.querySelector('.options');
       opts.addEventListener('click', function(e){
@@ -807,21 +889,25 @@ var LESSONS = [
         chime(ok);
       });
     }
-  }; },
-  function(){ return {
+  };
+}
+function lessonBigger(){
+  var ps = parts(), last = ps[ps.length-1];
+  var sent = ['A torta '+FR[ps[0]].poss+' nagyobb, mint '+art(FR[ps[1]].poss)+'.'];
+  for (var i=1;i<ps.length-1;i++) sent.push(cap(art(FR[ps[i]].poss))+' nagyobb, mint '+art(FR[ps[i+1]].poss)+'.');
+  return {
     title:'Melyik darab a nagyobb?',
     html:
       '<p class="say">Ugyanakkora tortákat vágunk fel. Minél többen osztozunk, annál több darab lesz, és annál kisebb jut egy embernek.</p>'+
       '<div class="seg-wrap"><p class="seg-title" id="l5t">Hányan osztozunk?</p><div class="seg" role="radiogroup" aria-labelledby="l5t">'+
-        [2,3,4].map(function(d){ return '<button type="button" role="radio" aria-checked="'+(d===2)+'" data-d="'+d+'">'+d+'</button>'; }).join('')+'</div></div>'+
+        ps.map(function(d){ return '<button type="button" role="radio" aria-checked="'+(d===2)+'" data-d="'+d+'">'+d+'</button>'; }).join('')+'</div></div>'+
       '<div class="stage"><div class="pie-holder" id="l5pie"></div><p class="stage-cap" id="l5cap" aria-live="polite"></p></div>'+
-      '<div class="compare-row">'+
-        '<figure>'+pie({sizes:eqSizes(2), on:[0], color:COLOR[2], label:'a torta fele'})+'<figcaption>a fele</figcaption></figure><span class="gt" aria-label="nagyobb, mint">&gt;</span>'+
-        '<figure>'+pie({sizes:eqSizes(3), on:[0], color:COLOR[3], label:'a torta harmada'})+'<figcaption>a harmada</figcaption></figure><span class="gt" aria-label="nagyobb, mint">&gt;</span>'+
-        '<figure>'+pie({sizes:eqSizes(4), on:[0], color:COLOR[4], label:'a torta negyede'})+'<figcaption>a negyede</figcaption></figure>'+
+      (ps.length > 3 ? '<div class="cmp-scale" aria-hidden="true"><span>← nagyobb</span><span>kisebb →</span></div>' : '')+
+      '<div class="compare-row'+(ps.length > 3 ? ' many' : '')+'" style="--n:'+ps.length+'">'+
+        ps.map(function(d){ return '<figure>'+pie({sizes:eqSizes(d), on:[0], color:COLOR[d], label:'a torta '+FR[d].poss})+'<figcaption><span class="cap-art">'+art(FR[d].poss).split(' ')[0]+' </span>'+FR[d].poss+'</figcaption></figure>'; }).join('<span class="gt" aria-label="nagyobb, mint">&gt;</span>')+
       '</div>'+
-      '<p class="say">A torta fele nagyobb, mint a harmada. A harmada nagyobb, mint a negyede.</p>'+
-      '<div class="tip"><p class="hand">Jó tanács</p><p>Ha nagyon éhes vagy, a torta felét kérd, ne a negyedét!</p></div>',
+      '<p class="say">'+sent.join(' ')+'</p>'+
+      '<div class="tip"><p class="hand">Jó tanács</p><p>Ha nagyon éhes vagy, a torta felét kérd, ne '+art(FR[last].acc)+'!</p></div>',
     bind: function(el){
       var holder = el.querySelector('#l5pie'), capEl = el.querySelector('#l5cap');
       function show(d){
@@ -832,43 +918,56 @@ var LESSONS = [
       bindSeg(el.querySelector('.seg'), show);
       show(2);
     }
-  }; },
-  function(){
-    var D = dist(8, 2, 'apple');
-    return {
-      title:'Mennyi a 8 alma fele?',
-      html:
-        '<p class="say">Nem csak tortát lehet elosztani! Van 8 almánk. Rakd át őket a két tányérra úgy, hogy mindkettőn ugyanannyi legyen!</p>'+
-        '<div class="dist-holder">'+D.html+'</div>'+
-        '<div class="row"><button class="btn primary" type="button" data-split>Mutasd meg, hogyan kell!</button><button class="btn" type="button" data-again hidden>Még egyszer</button></div>'+
-        '<div class="reveal" hidden><p class="say">Mindkét tányéron 4 alma van. <b>A 8 fele 4.</b></p>'+
-        '<div class="tip"><p class="hand">A szorzótábla segít!</p><p>Két tányér, mindegyiken 4 alma: <b>2 × 4 = 8</b>. Ezért a 8 fele 4.</p></div></div>',
-      bind: function(el){
-        var sp = el.querySelector('[data-split]'), ag = el.querySelector('[data-again]');
-        var c = D.attach(el.querySelector('.dist-holder'), {onDone: function(){
-          el.querySelector('.reveal').hidden = false; sp.hidden = true; ag.hidden = false; chime(true);
-        }});
-        sp.addEventListener('click', function(){ c.split(); });
-        ag.addEventListener('click', function(){ c.reset(); ag.hidden = true; sp.hidden = false; });
-      }
-    };
-  },
-  function(){ return {
-    title:'Harmada és negyede',
+  };
+}
+function lessonApples(){
+  var D = dist(8, 2, 'apple');
+  return {
+    title:'Mennyi a 8 alma fele?',
     html:
-      '<p class="say">Nagymama 12 pogácsát sütött. Hány tányérra osszuk szét? Válassz!</p>'+
+      '<p class="say">Nem csak tortát lehet elosztani! Van 8 almánk. Rakd át őket a két tányérra úgy, hogy mindkettőn ugyanannyi legyen!</p>'+
+      '<div class="dist-holder">'+D.html+'</div>'+
+      '<div class="row"><button class="btn primary" type="button" data-split>Mutasd meg, hogyan kell!</button><button class="btn" type="button" data-again hidden>Még egyszer</button></div>'+
+      '<div class="reveal" hidden><p class="say">Mindkét tányéron 4 alma van. <b>A 8 fele 4.</b></p>'+
+      '<div class="tip"><p class="hand">A szorzótábla segít!</p><p>Két tányér, mindegyiken 4 alma: <b>2 × 4 = 8</b>. Ezért a 8 fele 4.</p></div></div>',
+    bind: function(el){
+      var sp = el.querySelector('[data-split]'), ag = el.querySelector('[data-again]');
+      var c = D.attach(el.querySelector('.dist-holder'), {onDone: function(){
+        el.querySelector('.reveal').hidden = false; sp.hidden = true; ag.hidden = false; chime(true);
+      }});
+      sp.addEventListener('click', function(){ c.split(); });
+      ag.addEventListener('click', function(){ c.reset(); ag.hidden = true; sp.hidden = false; });
+    }
+  };
+}
+/* how many cookies: one number that every chosen part divides, if a small one exists */
+function cookieCount(d){
+  var ps = parts();
+  if (ps.every(function(x){ return 12 % x === 0; })) return 12;
+  if (ps.every(function(x){ return 30 % x === 0; })) return 30;
+  return 12 % d === 0 ? 12 : 10;
+}
+function lessonCookies(){
+  var ps = parts(), base = cookieCount(2), n3 = cookieCount(3);
+  return {
+    title:'Osszuk szét a pogácsát!',
+    html:
+      '<p class="say">Nagymama '+base+' pogácsát sütött. Hány tányérra osszuk szét? Válassz!</p>'+
       '<div class="seg" role="radiogroup" aria-label="Hány tányérra osszuk szét?">'+
-        [2,3,4].map(function(d){ return '<button type="button" role="radio" aria-checked="'+(d===2)+'" data-d="'+d+'">'+cap(FR[d].poss)+'<small>'+d+' tányér</small></button>'; }).join('')+'</div>'+
+        ps.map(function(d){ return '<button type="button" role="radio" aria-checked="'+(d===2)+'" data-d="'+d+'">'+cap(FR[d].poss)+'<small>'+d+' tányér</small></button>'; }).join('')+'</div>'+
+      '<p class="say" id="l7n" hidden></p>'+
       '<div class="dist-holder" id="l7d"></div>'+
       '<div class="row"><button class="btn primary" type="button" data-split>Mutasd meg, hogyan kell!</button></div>'+
       '<p class="result-line" id="l7r" aria-live="polite"></p>'+
-      '<div class="tip"><p class="hand">Trükk</p><p>Keresd meg a szorzótáblában! Ha a 12 harmadát keresed, ezt kérdezd: <b>3 × ? = 12</b>. A válasz 4, ezért a 12 harmada 4.</p></div>',
+      '<div class="tip"><p class="hand">Trükk</p><p>Keresd meg a szorzótáblában! Ha '+az(n3)+' '+n3+' harmadát keresed, ezt kérdezd: <b>3 × ? = '+n3+'</b>. A válasz '+(n3/3)+', ezért '+az(n3)+' '+n3+' harmada '+(n3/3)+'.</p></div>',
     bind: function(el){
-      var holder = el.querySelector('#l7d'), res = el.querySelector('#l7r'), sp = el.querySelector('[data-split]'), c = null;
+      var holder = el.querySelector('#l7d'), res = el.querySelector('#l7r'), note = el.querySelector('#l7n'), sp = el.querySelector('[data-split]'), c = null;
       function show(d){
-        var D = dist(12, d, 'cookie'); holder.innerHTML = D.html;
+        var n = cookieCount(d), D = dist(n, d, 'cookie'); holder.innerHTML = D.html;
+        note.hidden = n === base;
+        note.textContent = n === base ? '' : 'Hogy '+d+' tányérra egyformán jusson, most '+n+' pogácsát sütött.';
         c = D.attach(holder, {onDone: function(){
-          res.innerHTML = 'Egy tányérra '+(12/d)+' pogácsa jutott. <b>A 12 '+FR[d].poss+' '+(12/d)+'</b>, mert '+d+' × '+(12/d)+' = 12.';
+          res.innerHTML = 'Egy tányérra '+(n/d)+' pogácsa jutott. <b>'+cap(az(n))+' '+n+' '+FR[d].poss+' '+(n/d)+'</b>, mert '+d+' × '+(n/d)+' = '+n+'.';
           chime(true);
         }});
         res.innerHTML = '';
@@ -877,35 +976,50 @@ var LESSONS = [
       bindSeg(el.querySelector('.seg'), show);
       show(2);
     }
-  }; },
-  function(){ return {
-    title:'Négy egyforma csoki',
+  };
+}
+function lessonWall(){
+  var ps = parts(), last = ps[ps.length-1];
+  return {
+    title:'Egyforma csokik',
     html:
-      '<p class="say">Itt négy egyforma hosszú csoki van. A legfelsőt nem törtük el. Az alatta lévőt két egyforma darabra törtük, a következőt háromra, a legalsót négyre. Koppints a darabokra, és színezd ki őket!</p>'+
-      '<div class="wall-holder">'+wall([1,2,3,4], true)+'</div>'+
-      '<ul class="facts"><li>2 egyforma darab<small>Egy darab a csoki fele.</small></li><li>3 egyforma darab<small>Egy darab a csoki harmada.</small></li><li>4 egyforma darab<small>Egy darab a csoki negyede.</small></li><li>Több darab, kisebb darab<small>A fele nagyobb, mint a negyede.</small></li></ul>'+
-      '<div class="tip"><p class="hand">Kis puska</p><p><b>Fél:</b> 2 egyforma részre osztunk. <b>Harmad:</b> 3 részre. <b>Negyed:</b> 4 részre. Ha egy szám felét, harmadát vagy negyedét keresed, kérdezd meg a szorzótáblát: 2 × ? , 3 × ? vagy 4 × ?</p></div>',
+      '<p class="say">Itt '+(ps.length+1)+' egyforma hosszú csoki van. A legfelsőt nem törtük el, a többit sorban '+andList(ps.map(String))+' egyforma darabra törtük. Koppints a darabokra, és színezd ki őket!</p>'+
+      '<div class="wall-holder">'+wall([1].concat(ps), true)+'</div>'+
+      '<ul class="facts">'+ps.map(function(d){ return '<li><b>'+d+' egyforma darab:</b> egy darab a csoki '+FR[d].poss+'.</li>'; }).join('')+
+        '<li><b>Több darab, kisebb darab:</b> a fele nagyobb, mint '+art(FR[last].poss)+'.</li></ul>'+
+      '<div class="tip"><p class="hand">Kis puska</p><p>'+ps.map(function(d,i){ return '<b>'+cap(FR[d].name)+':</b> '+d+(i===0?' egyforma részre osztunk.':' részre.'); }).join(' ')+
+        ' Ha egy szám '+orList(ps.map(function(d){ return FR[d].acc; }))+' keresed, kérdezd meg a szorzótáblát: '+orList(ps.map(function(d){ return d+' × ?'; }))+'</p></div>',
     bind: function(el){
       el.querySelector('.wall').addEventListener('click', function(e){
         var p = e.target.closest('.wall-piece'); if (!p) return;
         var on = !p.classList.contains('on'); p.classList.toggle('on', on); p.setAttribute('aria-pressed', on);
       });
     }
-  }; }
-];
-if (typeof state.lesson !== 'number' || state.lesson < 0 || state.lesson >= LESSONS.length) state.lesson = 0;
+  };
+}
+/* the lesson list follows the parts chosen on the home page */
+function buildLessons(){
+  var ps = parts(), L = [];
+  ps.forEach(function(d, i){ L.push(function(){ return lessonCut(d, i === ps.length-1); }); });
+  return L.concat([lessonFair, lessonBigger, lessonApples, lessonCookies, lessonWall]);
+}
+if (typeof state.lesson !== 'number' || state.lesson < 0 || state.lesson >= buildLessons().length) state.lesson = 0;
+/* "-ból/-ből" after a lesson count */
+function fromN(n){ return n+'-'+({3:'ból',6:'ból',8:'ból'}[n%10] || (n===20||n===30 ? 'ból' : 'ből')); }
 
 function setLesson(j){
-  state.lesson = Math.max(0, Math.min(LESSONS.length-1, j)); save('lesson', state.lesson);
+  state.lesson = Math.max(0, Math.min(buildLessons().length-1, j)); save('lesson', state.lesson);
   renderLessons();
   app.scrollIntoView({block:'start'});
 }
 function renderLessons(){
+  var LESSONS = buildLessons();
+  if (state.lesson >= LESSONS.length) state.lesson = 0;
   var i = state.lesson, L = LESSONS[i]();
   app.innerHTML =
     '<section class="lessons">'+
     '<nav class="lesson-nav" aria-label="Leckék">'+LESSONS.map(function(_,j){ return '<button type="button" data-go="'+j+'"'+(j===i?' aria-current="step"':'')+' aria-label="'+(j+1)+'. lecke">'+(j+1)+'</button>'; }).join('')+'</nav>'+
-    '<article class="card lesson"><div class="lesson-head"><div><p class="lesson-no">'+(i+1)+'. lecke a 8-ból</p><h2>'+L.title+'</h2></div>'+speakBtn('Felolvasom')+'</div>'+L.html+'</article>'+
+    '<article class="card lesson"><div class="lesson-head"><div><p class="lesson-no">'+(i+1)+'. lecke a '+fromN(LESSONS.length)+'</p><h2>'+L.title+'</h2></div>'+speakBtn('Felolvasom')+'</div>'+L.html+'</article>'+
     '<div class="pager"><button class="btn" type="button" data-act="prev"'+(i===0?' disabled':'')+'>‹ Vissza</button>'+
     (i < LESSONS.length-1 ? '<button class="btn primary" type="button" data-act="next">Tovább ›</button>' : '<a class="btn primary" href="#gyakorlas">Jöhetnek a feladatok ›</a>')+'</div>'+
     '</section>';
@@ -921,12 +1035,12 @@ function renderLessons(){
 }
 
 /* ================= PRACTICE: question generators ================= */
-function dens(){ return state.settings.dens.slice().sort(); }
+function dens(){ return parts(); }
 function isHard(){ return !!state.settings.hard; }
-function partOpt(d){ return {v:d, text:'a '+FR[d].acc, html:'a '+FR[d].acc}; }
+function partOpt(d){ return {v:d, text:art(FR[d].acc), html:art(FR[d].acc)}; }
 function numOpt(v){ return {v:v, text:String(v), html:String(v)}; }
 function numOptions(ans, q, d){
-  var cand = shuffle([ans+1, ans-1, ans+2, ans-2, q, q-ans, ans*2, ans+d].concat([2,3,4].filter(function(x){ return x!==d && q%x===0; }).map(function(x){ return q/x; })));
+  var cand = shuffle([ans+1, ans-1, ans+2, ans-2, q, q-ans, ans*2, ans+d].concat([2,3,4,5,6].filter(function(x){ return x!==d && q%x===0; }).map(function(x){ return q/x; })));
   var out = [];
   cand.forEach(function(c){ if (c > 0 && c !== ans && out.indexOf(c) < 0 && out.length < 3) out.push(c); });
   var extra = ans + 3; while (out.length < 3){ if (out.indexOf(extra) < 0) out.push(extra); extra++; }
@@ -936,15 +1050,15 @@ function numOptions(ans, q, d){
 function genRecognize(){
   var d = pick(dens()), n = d, m = 1, kind;
   if (isHard() && Math.random() < 0.45){ m = pick([2,3].filter(function(x){ return d*x <= 12; })); n = d*m; }
-  if (n === d) kind = pick(d === 4 ? ['pie','bar','grid'] : ['pie','bar']);
+  if (n === d) kind = pick(d === 4 || d === 6 ? ['pie','bar','grid'] : ['pie','bar']);
   else kind = pick(n <= 6 ? ['pie','bar','grid'] : ['pie','grid']);
   var on = m === 1 ? [rnd(0, n-1)] : shuffle(range(n)).slice(0, m);
   return {
     prompt:'Mekkora részét színeztük ki?',
     visual: shape(kind, n, {on:on, label:n+' részre osztott alakzat, '+m+' rész színes'}),
-    kind:'mc', options:[2,3,4].map(partOpt), answer:d,
-    hint: m === 1 ? 'Számold meg: hány egyforma darabból áll az egész?' : 'Összesen '+n+' darab van, ebből '+m+' színes. Melyik igaz: 2 × '+m+' = '+n+', 3 × '+m+' = '+n+' vagy 4 × '+m+' = '+n+'?',
-    explain: m === 1 ? 'Az egész '+NUM[d]+' egyforma részből áll, és 1 rész színes. Ezért a '+FR[d].acc+' színeztük ki.' : n+' egyforma rész van, ebből '+m+' színes. '+cap(az(n))+' '+n+' '+FR[d].poss+' '+m+', mert '+d+' × '+m+' = '+n+'. Tehát a színes rész az egész '+FR[d].poss+'.'
+    kind:'mc', options:dens().map(partOpt), answer:d,
+    hint: m === 1 ? 'Számold meg: hány egyforma darabból áll az egész?' : 'Összesen '+n+' darab van, ebből '+m+' színes. Melyik igaz: '+orList(dens().map(function(x){ return x+' × '+m+' = '+n; }))+'?',
+    explain: m === 1 ? 'Az egész '+NUM[d]+' egyforma részből áll, és 1 rész színes. Ezért '+art(FR[d].acc)+' színeztük ki.' : n+' egyforma rész van, ebből '+m+' színes. '+cap(az(n))+' '+n+' '+FR[d].poss+' '+m+', mert '+d+' × '+m+' = '+n+'. Tehát a színes rész az egész '+FR[d].poss+'.'
   };
 }
 function genEqual(){
@@ -953,7 +1067,7 @@ function genEqual(){
   var r = Math.random(), sizes, ans, explain;
   if (r < 0.45){ sizes = eqSizes(d); ans = 'yes'; explain = 'Igen! A '+thing+' '+NUM[d]+' egyforma darabra van '+verb+', ezért egy darab éppen a '+thing+' '+FR[d].poss+'.'; }
   else if (r < 0.8){ sizes = shuffle(pick(UNEQ[d])); ans = 'no'; explain = 'Nem! A '+thing+' '+NUM[d]+' darabra van '+verb+', de a darabok nem egyformák. Ezért a színes rész nem a '+thing+' '+FR[d].poss+'.'; }
-  else { var o = pick([2,3,4].filter(function(x){ return x !== d; })); sizes = eqSizes(o); ans = 'no'; explain = 'Nem! A '+thing+' '+NUM[o]+' egyforma darabra van '+verb+', ezért a színes rész a '+thing+' '+FR[o].poss+', nem a '+FR[d].poss+'.'; }
+  else { var o = pick(dens().filter(function(x){ return x !== d; })); sizes = eqSizes(o); ans = 'no'; explain = 'Nem! A '+thing+' '+NUM[o]+' egyforma darabra van '+verb+', ezért a színes rész a '+thing+' '+FR[o].poss+', nem '+art(FR[d].poss)+'.'; }
   var on = [rnd(0, sizes.length-1)];
   return {
     prompt:'A színes rész a '+thing+' '+FR[d].poss+'?',
@@ -976,16 +1090,16 @@ function genColor(){
     sub:'Koppints a darabokra, aztán nyomd meg a Kész gombot.',
     visual: shape(kind, n, {on:[], interactive:true, label:n+' darabos '+thing}),
     kind:'color', m:m, n:n,
-    hint: m === 1 ? 'A '+thing+' '+NUM[d]+' egyforma darabból áll. Ebből 1 darab éppen a '+FR[d].poss+'.' : n+' darab van. Keresd meg a szorzótáblában: '+d+' × ? = '+n+'.',
-    explain: m === 1 ? 'Az egész '+NUM[d]+' darab, ebből 1 darab a '+FR[d].poss+'.' : cap(az(n))+' '+n+' darab '+FR[d].poss+' '+m+' darab, mert '+d+' × '+m+' = '+n+'.'
+    hint: m === 1 ? 'A '+thing+' '+NUM[d]+' egyforma darabból áll. Ebből 1 darab éppen '+art(FR[d].poss)+'.' : n+' darab van. Keresd meg a szorzótáblában: '+d+' × ? = '+n+'.',
+    explain: m === 1 ? 'Az egész '+NUM[d]+' darab, ebből 1 darab '+art(FR[d].poss)+'.' : cap(az(n))+' '+n+' darab '+FR[d].poss+' '+m+' darab, mert '+d+' × '+m+' = '+n+'.'
   };
 }
 var WORD = [
-  {kind:'cookie', t:function(q,d){ return 'Nagymama '+q+' pogácsát sütött. A '+FR[d].acc+' neked adja. Hány pogácsát kapsz?'; }},
-  {kind:'apple',  t:function(q,d){ return 'A kosárban '+q+' alma van. A '+FR[d].acc+' megettük. Hány almát ettünk meg?'; }},
-  {kind:'star',   t:function(q,d){ return 'Panni '+q+' matricát gyűjtött. A '+FR[d].acc+' odaadta Bencének. Hány matricát adott oda?'; }},
+  {kind:'cookie', t:function(q,d){ return 'Nagymama '+q+' pogácsát sütött. '+cap(art(FR[d].acc))+' neked adja. Hány pogácsát kapsz?'; }},
+  {kind:'apple',  t:function(q,d){ return 'A kosárban '+q+' alma van. '+cap(art(FR[d].acc))+' megettük. Hány almát ettünk meg?'; }},
+  {kind:'star',   t:function(q,d){ return 'Panni '+q+' matricát gyűjtött. '+cap(art(FR[d].acc))+' odaadta Bencének. Hány matricát adott oda?'; }},
   {kind:'marble', t:function(q,d){ return q+' golyót egyformán szétosztunk '+NUM[d]+' gyerek között. Hány golyót kap egy gyerek?'; }},
-  {kind:'kid', max:32, t:function(q,d){ return 'Az osztályba '+q+' gyerek jár. A '+FR[d].poss+' fiú. Hány fiú jár az osztályba?'; }}
+  {kind:'kid', max:32, t:function(q,d){ return 'Az osztályba '+q+' gyerek jár. '+cap(art(FR[d].poss))+' fiú. Hány fiú jár az osztályba?'; }}
 ];
 function genQuantity(word){
   var d = pick(dens()), k = isHard() ? rnd(2,10) : rnd(2,5), q = d*k, text, kind, sub = '';
@@ -1009,23 +1123,27 @@ function genQuantity(word){
     onDone:function(){ this.ctrl.split(); }
   };
 }
-function cmpPool(){ var p = dens(); return p.length >= 2 ? p : [2,3,4]; }
 function genCmpShape(){
-  var ab = shuffle(cmpPool()).slice(0,2), lo = Math.min(ab[0],ab[1]), hi = Math.max(ab[0],ab[1]);
+  var ab = shuffle(dens()).slice(0,2), lo = Math.min(ab[0],ab[1]), hi = Math.max(ab[0],ab[1]);
   var bigger = Math.random() < 0.6, ans = bigger ? lo : hi, thing = pick(['torta','pizza']), word = bigger ? 'nagyobb' : 'kisebb';
   return {
     prompt:'Melyik darab a '+word+'?',
     visual:'', kind:'mc', optClass:'shapes', answer:ans,
     options: ab.map(function(x){ return {v:x, text:'a '+thing+' '+FR[x].poss, html:'<span class="opt-shape">'+pie({sizes:eqSizes(x), on:[0], label:FR[x].name})+'</span><span>a '+thing+' '+FR[x].poss+'</span>'}; }),
     hint:'Melyiket vágták kevesebb darabra? Annak nagyobbak a darabjai.',
-    explain: 'Ha a '+ACC[thing]+' '+NUM[lo]+' darabra vágjuk, egy darab a '+FR[lo].poss+'. Ha '+NUM[hi]+' darabra, egy darab a '+FR[hi].poss+'. Minél több darabra vágjuk, annál kisebb egy darab. Tehát a '+thing+' '+FR[ans].poss+' a '+word+'.'
+    explain: 'Ha a '+ACC[thing]+' '+NUM[lo]+' darabra vágjuk, egy darab '+art(FR[lo].poss)+'. Ha '+NUM[hi]+' darabra, egy darab '+art(FR[hi].poss)+'. Minél több darabra vágjuk, annál kisebb egy darab. Tehát a '+thing+' '+FR[ans].poss+' a '+word+'.'
   };
 }
 function genCmpNum(){
-  var ab = shuffle(cmpPool()).slice(0,2), lo = Math.min(ab[0],ab[1]), hi = Math.max(ab[0],ab[1]);
-  var l = lo*hi/gcd(lo,hi), maxQ = lo*(isHard() ? 10 : 5), qs = [];
-  for (var x = l; x <= maxQ; x += l) qs.push(x);
-  var q = pick(qs);
+  /* only pairs where a common number stays inside the times table being practised */
+  var maxK = isHard() ? 10 : 5, ps = dens(), pairs = [];
+  ps.forEach(function(a){ ps.forEach(function(b){
+    if (a >= b) return;
+    var l = a*b/gcd(a,b), qs = [];
+    for (var x = l; x <= a*maxK; x += l) qs.push(x);
+    if (qs.length) pairs.push([a, b, qs]);
+  }); });
+  var pr = pick(pairs), lo = pr[0], hi = pr[1], q = pick(pr[2]), ab = shuffle([lo, hi]);
   function lab(d){ return az(q)+' '+q+' '+FR[d].poss; }
   return {
     prompt:'Melyik a több: '+lab(ab[0])+' vagy '+lab(ab[1])+'?',
@@ -1036,12 +1154,14 @@ function genCmpNum(){
   };
 }
 function genWhole(){
-  var d = pick(dens()), thing = pick(['torta','pizza']);
+  var ps = dens(), d = pick(ps), thing = pick(['torta','pizza']), top = Math.max(4, ps[ps.length-1]), opts = [];
+  for (var i=1;i<=top;i++) opts.push(i);
+  var remind = ps.map(function(x, i){ return i === 0 ? 'ha két darabra vágjuk, egy darab a fele.' : 'Ha '+ONTO[x]+', '+art(FR[x].poss)+'.'; }).join(' ');
   return {
     prompt:'Egy darab a '+thing+' '+FR[d].poss+'. Hány egyforma darabra vágtuk?',
     visual: pie({sizes:[1], label:'egész '+thing}),
-    kind:'mc', optClass:'nums', options:[1,2,3,4].map(numOpt), answer:d,
-    hint:'Emlékezz: ha két darabra vágjuk, egy darab a fele. Ha háromra, a harmada. Ha négyre, a negyede.',
+    kind:'mc', optClass:'nums', options:opts.map(numOpt), answer:d,
+    hint:'Emlékezz: '+remind,
     explain:'Ha egy darab a '+thing+' '+FR[d].poss+', akkor '+NUM[d]+' egyforma darabra vágtuk.',
     mount:function(card){ this.vis = card.querySelector('.visual'); },
     onDone:function(){ this.vis.innerHTML = pie({sizes:eqSizes(d), on:[0], color:COLOR[d], label:NUM[d]+' darabra vágott '+thing}); }
@@ -1089,21 +1209,17 @@ function renderSetup(){
         choice('radio','mode','numbers', s.mode==='numbers', '<b>Számolás</b><small>Mennyi a 12 fele? Szöveges feladatok.</small>')+
         choice('radio','mode','mix', s.mode==='mix', '<b>Vegyes</b><small>Egy kicsit mindegyikből.</small>')+
       '</div></fieldset>'+
-      '<fieldset><legend>Melyik részekkel?</legend><div class="choices-row dens">'+
-        [2,3,4].map(function(d){ return '<label class="choice"><input type="checkbox" name="dens" id="dens-'+d+'" value="'+d+'"'+(s.dens.indexOf(d)>=0?' checked':'')+'><span class="den"><i class="dot" style="background:'+COLOR[d]+'"></i><b>'+FR[d].name+'</b></span></label>'; }).join('')+
-      '</div><p class="warn" id="densWarn" hidden>Legalább egyet válassz ki!</p></fieldset>'+
+      '<div class="parts-summary"><p class="parts-summary-title">Ezekkel a részekkel gyakorolunk:</p>'+
+        '<ul class="part-chips">'+parts().map(function(d){ return '<li><i class="dot" style="background:'+COLOR[d]+'"></i>'+FR[d].name+'</li>'; }).join('')+'</ul>'+
+        '<p class="parts-summary-note">A főoldalon tudod módosítani. <a href="#">Módosítom</a></p></div>'+
       '<fieldset><legend>Milyen nehéz legyen?</legend><div class="choices-row">'+
         choice('radio','lvl','easy', !s.hard, '<b>Könnyebb</b><small>Kisebb számok: a szorzótábla <span class="nowrap">5-ig</span>.</small>')+
-        choice('radio','lvl','hard', s.hard, '<b>Nehezebb</b><small>A teljes <span class="nowrap">2-es,</span> <span class="nowrap">3-as</span> és <span class="nowrap">4-es</span> szorzótábla.</small>')+
+        choice('radio','lvl','hard', s.hard, '<b>Nehezebb</b><small>A teljes szorzótábla, <span class="nowrap">10-ig</span>.</small>')+
       '</div></fieldset>'+
       '<div><button class="btn primary big" type="submit">Indulhat a kör!</button></div>'+
     '</form></section>';
-  var f = app.querySelector('#setupForm'), warn = app.querySelector('#densWarn');
-  f.addEventListener('change', function(e){
-    var checked = [].slice.call(f.querySelectorAll('input[name=dens]:checked')).map(function(x){ return +x.value; });
-    if (!checked.length && e.target.name === 'dens'){ e.target.checked = true; warn.hidden = false; return; }
-    warn.hidden = true;
-    s.dens = checked;
+  var f = app.querySelector('#setupForm');
+  f.addEventListener('change', function(){
     s.mode = f.querySelector('input[name=mode]:checked').value;
     s.hard = f.querySelector('input[name=lvl]:checked').value === 'hard';
     save('settings', s);
